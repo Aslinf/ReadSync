@@ -1,0 +1,30 @@
+body .signin-up {
+    background-color: var(--light-cream-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.form h2 {
+    color: var(--dark-brown-color);
+}
+
+span {
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.form > p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    column-gap: 5px;
+}
+
+.form > p > span {
+    color: var(--dark-brown-color);
+}
