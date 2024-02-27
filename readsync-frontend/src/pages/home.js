@@ -1,12 +1,13 @@
 import '../stylesheets/home.css'
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 import Logout from '../components/log-out';
 
 const Header = () => {
   const { isAuthenticated, setIsAuthenticated, user, token } = useAuth();
   const [busqueda, setBusqueda] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
@@ -20,6 +21,12 @@ const Header = () => {
       setBusqueda("error");
     }
   }
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      navigate(`/busqueda/${busqueda}`);
+    }
+  }
  
   return(
     <>
@@ -29,7 +36,7 @@ const Header = () => {
         </Link>
 
         <div>
-          <input type='text' placeholder='Buscar algún libro' className='search-bar' onChange={handleChange}/>
+          <input type='text' placeholder='Buscar algún libro' className='search-bar' onChange={handleChange} onKeyPress={handleKeyPress}/>
           <Link to={`/busqueda/${busqueda}`} className='search-button'>Buscar</Link>
         </div>
         
@@ -39,9 +46,9 @@ const Header = () => {
             <button className='menu-button'>¡Hola {user}!</button>
             <div className="dropdown-menu">
               <ul>
-                <Link to={"/perfil"}>Perfil</Link>
-                <li>Biblioteca</li>
-                <li>Estadísticas</li>
+                <li><Link to={"/perfil"}>Perfil</Link></li>
+                <li><Link to={"/biblioteca"}>Biblioteca</Link></li>
+                <li><Link to={"/"}>Estadísticas</Link></li>
                 <li><Logout/></li>
               </ul>
             </div>
@@ -57,27 +64,15 @@ const Header = () => {
 
 }
 
+function Loader() {
+  return(
+    <div className='loader-container'>
+      <p className="loader"></p>
+    </div>
+  )
+}
+
 function Home() {
-  const [data, setData] = useState([]);
-  const [error, setError]= useState(null);
-  const api = 'http://openlibrary.org/subjects/love.json?limit=3';
-
-  useEffect(() => {
-    const getData = async () => {
-      try{
-        const response = await fetch(api);
-        const json = await response.json();
-        setData(json);
-      } catch(err) {
-        setError(err.message);
-      } finally {
-
-      }
-    }
-    getData();
-  }, [api]);
-
-
 
 	return(
 		<>
@@ -119,4 +114,4 @@ function Home() {
       */
 
 export default Home;
-export {Header};
+export {Header, Loader};

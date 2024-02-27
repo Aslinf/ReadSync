@@ -1,0 +1,33 @@
+#library-section {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100vh;
+    justify-content: center;
+    column-gap: 30px;
+    row-gap: 0px;
+    background-color: var(--light-cream-color);
+}
+
+.collection-container {
+    background-color: var(--dark-cream-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 20px 20px 20px;
+    height: 200px;
+    width: 150px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--dark-brown-color);
+    box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+.collection-container:hover {
+    height: 210px;
+    width: 160px;
+    transition: all 0.5s ease-out;
+}
+
+.collection-name {
+    font-weight: 500;
+}

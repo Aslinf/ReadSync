@@ -34,7 +34,7 @@ function Logout() {
 
   return (
 
-    <span onClick={handleLogout}>Cerrar Sesión</span>
+    <a onClick={handleLogout}>Cerrar Sesión</a>
 
   );
 }

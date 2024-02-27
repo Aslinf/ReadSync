@@ -47,7 +47,7 @@ body .home {
     text-decoration: none;
     color: var(--light-cream-color);
     background-color: var(--light-brown-color);
-    padding: 13px;
+    padding: 13px 20px;
     border-radius: 30px;
     margin-left: 20px;
 }
@@ -79,11 +79,16 @@ body .home {
 }
 
 .dropdown-menu ul li {
+    padding: 20px 5px 5px;
+}
+
+.dropdown-menu ul a {
+    text-decoration: none;
     padding: 15px;
     color: var(--dark-brown-color);
 }
 
-.dropdown-menu ul li:hover {
+.dropdown-menu ul a:hover {
     padding: 15px;
     cursor: pointer;
     font-weight: 500;
@@ -112,6 +117,10 @@ body .home {
     text-decoration: none;
 }
 
+.button-signup:hover {
+    opacity: 0.9;
+}
+
 @media (max-width: 1000px) {
     .home-header{
         flex-direction: column;
@@ -132,6 +141,43 @@ body .home {
     height: 600px;
 }
 
+/* Loader */
+
+.loader-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    position: relative;
+    animation: rotate 1s linear infinite
+  }
+.loader::before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    inset: 0px;
+    border-radius: 50%;
+    border: 5px solid var(--dark-brown-color);
+    animation: prixClipFix 2s linear infinite ;
+}
+
+@keyframes rotate {
+    100%   {transform: rotate(360deg)}
+}
+
+@keyframes prixClipFix {
+    0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+    25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+    50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+    75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
+    100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+}
 
 
 /* Carousel */

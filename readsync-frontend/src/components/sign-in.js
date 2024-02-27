@@ -84,14 +84,9 @@ function SignIn(){
       setError("¡Se deben rellenar todos los campos!");
     }
   }
-/*
-  useEffect(() => {
-    if(isAuthenticated){
-      navigate('/home', {state:{user, isAuthenticated}});
-    }
-  }, [isAuthenticated]);
+
+
   
-*/
   return(
     <>
     <h2>Inicia Sesión</h2>
