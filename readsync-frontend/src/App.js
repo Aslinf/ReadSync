@@ -11,7 +11,7 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
-      <Route path='/signin-up' element={<Signin_up />} />
+      <Route path='/sesion' element={<Signin_up />} />
       <Route path='/perfil' element={<Profile/>} />
       <Route path='/libro/:bookId' element={<Book />} />
       <Route path='/busqueda/:book' element={<Search />} />
