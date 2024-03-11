@@ -25,7 +25,7 @@ function Logout() {
     })
     .then((res) => {
       logout(); 
-      navigate('/signin-up'); 
+      navigate('/sesion'); 
     })
     .catch((err) => {
       console.error(err);

@@ -1,6 +1,6 @@
 import '../stylesheets/home.css'
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 import Logout from '../components/log-out';
 
@@ -48,7 +48,7 @@ const Header = () => {
               <ul>
                 <li><Link to={"/perfil"}>Perfil</Link></li>
                 <li><Link to={"/biblioteca"}>Biblioteca</Link></li>
-                <li><Link to={"/"}>Estadísticas</Link></li>
+                <li><Link to={"/estadisticas"}>Estadísticas</Link></li>
                 <li><Logout/></li>
               </ul>
             </div>
@@ -64,13 +64,14 @@ const Header = () => {
 
 }
 
-function Loader() {
-  return(
-    <div className='loader-container'>
-      <p className="loader"></p>
-    </div>
-  )
-}
+  function Loader() {
+    return(
+      <div className='loader-container'>
+        <p className="loader"></p>
+      </div>
+    )
+  }
+
 
 function Home() {
 
@@ -80,11 +81,11 @@ function Home() {
 
       <Header/>
 
-      <div className='first-home-container'>
+      <div className='home-container'>
+
+        <Outlet />
 
       </div>
-
-
 
       <footer>
         
@@ -95,23 +96,6 @@ function Home() {
 	)
 }
 
-/*
-      <div className='carousel-home'>
-          <h3>Romance</h3>
-          <div className='carousel-books'>
-            {data && data.works?.map((data) => (
-              <Link 
-              key={data.key}
-              to={`${data.key}`}
-              className='carousel-book'>
-                
-                  <span>{data.title}</span>
-                  <img alt='portada de libro' src={`https://covers.openlibrary.org/b/id/${data.cover_id}-M.jpg`}/>
-              </Link> 
-            ))}
-          </div>
-      </div>
-      */
 
 export default Home;
 export {Header, Loader};

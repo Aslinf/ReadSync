@@ -13,12 +13,13 @@ function Search(){
 
 	const APIKey = "AIzaSyBMESbDd7GPd7uKJgr-KFz0A6U5j6CMfA8";
 
-
 	const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 	const RESULTS_PER_PAGE = 8;
 
+
 	useEffect(() => {
+    //conseguimos los resultados de búsqueda
     const fetchData = async () => {
       try {
         const startIndex = currentPage * RESULTS_PER_PAGE;
@@ -44,7 +45,6 @@ function Search(){
 
 	return(
 		<>
-		<Header/>
 
 		<section className="search-container">
 			{loading ? 

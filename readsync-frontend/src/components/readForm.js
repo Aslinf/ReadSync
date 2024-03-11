@@ -50,8 +50,6 @@ const ReadForm = ({ setForm, setPopup, handleInputChange, handleAddCollection, d
                 <option value="5">5</option>
               </select>
 
-              
-
               <textarea 
               onChange={(e)=> handleInputChange(e, "formComment")}/>
               

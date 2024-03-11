@@ -7,7 +7,6 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Content-Type: application/json");
 
-// Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -16,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $eData = file_get_contents("php://input");
 $dData = json_decode($eData, true);
 
-// Check if JSON data is decoded successfully
 if ($dData === null) {
     $response[] = array("result" => "Error decoding JSON data");
     echo json_encode($response);

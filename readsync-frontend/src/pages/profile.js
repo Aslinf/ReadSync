@@ -5,7 +5,7 @@ function Profile() {
 	const { user } = useAuth();
 	return(
 		<>
-			<Header/>
+			
 			<div>
 				<p>Hola {user}</p>
 				<p>ALOOOOOOOOOOO</p>

@@ -7,7 +7,6 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Content-Type: application/json");
 
-// Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -16,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $eData = file_get_contents("php://input");
 $dData = json_decode($eData, true);
 
-// Check if JSON data is decoded successfully
 if ($dData === null) {
     $response[] = array("result" => "Error decoding JSON data");
     echo json_encode($response);
@@ -49,40 +47,16 @@ if ($user !== "") {
         // Colección "Leídos" existe para el usuario
         $stmtCheckCollection->bind_result($idCollection);
         $stmtCheckCollection->fetch();
-    } else {
-        // Colección "Leídos" no existe, así que la creamos
-        $sqlCheckIfLeidosExists = "SELECT id_coleccion FROM COLECCIONES WHERE nombre = 'Leídos'";
-        $stmtCheckIfLeidosExists = $conn->prepare($sqlCheckIfLeidosExists);
-        $stmtCheckIfLeidosExists->execute();
-        $stmtCheckIfLeidosExists->store_result();
 
-        if ($stmtCheckIfLeidosExists->num_rows === 0) {
-            $sqlCreateCollection = "INSERT INTO COLECCIONES (nombre) VALUES ('Leídos')";
-            if ($conn->query($sqlCreateCollection) === TRUE) {
-                $idCollection = $conn->insert_id;
-            } else {
-                $result = "Error creando la colección 'Leídos': " . $conn->error;
-            }
-        } else {
-            // Colección "Leídos" existe, conseguimos su ID
-            $stmtCheckCollection->bind_result($idCollection);
-            $stmtCheckCollection->fetch();
-        }
-
-        $stmtCheckIfLeidosExists->close();
-    }
-
-    // una vez tenemos el ID de la colección "Leídos"
-    if (isset($idCollection) && $idCollection !== "") {
-        // Mirar si el usuario ya tiene el libro en sus colecciones
-        $sqlCheckBook = "SELECT id_libro FROM LIBROS WHERE nombre = ? AND id_usuario = (SELECT id_usuario FROM USUARIOS WHERE usuario = ?)";
+        // Mirar si el libro ya existe en la colección "Leídos"
+        $sqlCheckBook = "SELECT LIBROS_id_libro FROM COLECCIONES_has_LIBROS WHERE COLECCIONES_id_coleccion = ? AND LIBROS_id_libro IN (SELECT id_libro FROM LIBROS WHERE ID = ?)";
         $stmtCheckBook = $conn->prepare($sqlCheckBook);
-        $stmtCheckBook->bind_param("ss", $bookName, $user);
+        $stmtCheckBook->bind_param("is", $idCollection, $ID);
         $stmtCheckBook->execute();
         $stmtCheckBook->store_result();
 
         if ($stmtCheckBook->num_rows > 0) {
-            // Actualizamos la información si el usuario ya tenía el libro
+            // El libro ya existe en la colección "Leídos", actualizamos la versión
             $stmtCheckBook->bind_result($bookId);
             $stmtCheckBook->fetch();
 
@@ -102,15 +76,13 @@ if ($user !== "") {
             if ($stmtUpdateBook->affected_rows > 0) {
                 $result = "Información actualizada. ";
             } else {
-                $result = "Error actualizando la infromación. ";
+                $result = "Error actualizando la información. ";
             }
 
             $stmtUpdateBook->close();
-
         } else {
-            // El libro no está en ninguna colección, lo añadimos
-            $sqlInsertBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, id_usuario) 
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
+            // El libro no está en la colección "Leídos", lo añadimos
+            $sqlInsertBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
             $stmtInsertBook = $conn->prepare($sqlInsertBook);
             $stmtInsertBook->bind_param("ssssssisss", $bookName, $genre, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
             $stmtInsertBook->execute();
@@ -121,35 +93,68 @@ if ($user !== "") {
                 // Conseguimos el ID del libro
                 $bookId = $stmtInsertBook->insert_id;
 
-                // Juntamos el libro con la colección en la base de datos
-                $sqlLink = "INSERT INTO COLECCIONES_has_LIBROS (COLECCIONES_id_coleccion, LIBROS_id_libro) 
-                            VALUES (?, ?)";
-                $stmtLink = $conn->prepare($sqlLink);
-                $stmtLink->bind_param("ii", $idCollection, $bookId);
-                $stmtLink->execute();
+                // Enlazamos el libro a la colección "Leídos"
+                $sqlLinkBook = "INSERT INTO COLECCIONES_has_LIBROS (COLECCIONES_id_coleccion, LIBROS_id_libro) VALUES (?, ?)";
+                $stmtLinkBook = $conn->prepare($sqlLinkBook);
+                $stmtLinkBook->bind_param("ii", $idCollection, $bookId);
+                $stmtLinkBook->execute();
 
-                /*if ($stmtLink->affected_rows > 0) {
-                    $result .= " and linked to collection successfully";
+                if ($stmtLinkBook->affected_rows > 0) {
+                    $result .= "Enlazado a la colección con éxito";
                 } else {
-                    $result .= " but failed to link to collection";
-                }*/
+                    $result .= "Error al enlazar a la colección";
+                }
 
-                $stmtLink->close();
+                $stmtLinkBook->close();
             } else {
                 $result = "Error añadiendo el libro. ";
             }
 
             $stmtInsertBook->close();
         }
+
+    } else {
+        // Colección "Leídos" no existe, así que la creamos
+        $sqlCreateCollection = "INSERT INTO COLECCIONES (nombre) VALUES ('Leídos')";
+        if ($conn->query($sqlCreateCollection) === TRUE) {
+            $idCollection = $conn->insert_id;
+
+            // Ahora añadimos el libro a la colección "Leídos"
+            $sqlInsertBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
+            $stmtInsertBook = $conn->prepare($sqlInsertBook);
+            $stmtInsertBook->bind_param("ssssssisss", $bookName, $genre, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
+            $stmtInsertBook->execute();
+
+            if ($stmtInsertBook->affected_rows > 0) {
+                $result = "Libro añadido con éxito. ";
+
+                // Conseguimos el ID del libro
+                $bookId = $stmtInsertBook->insert_id;
+
+                // Enlazamos el libro a la colección "Leídos"
+                $sqlLinkBook = "INSERT INTO COLECCIONES_has_LIBROS (COLECCIONES_id_coleccion, LIBROS_id_libro) VALUES (?, ?)";
+                $stmtLinkBook = $conn->prepare($sqlLinkBook);
+                $stmtLinkBook->bind_param("ii", $idCollection, $bookId);
+                $stmtLinkBook->execute();
+
+                $stmtLinkBook->close();
+            } else {
+                $result = "Error añadiendo el libro. ";
+            }
+
+            $stmtInsertBook->close();
+        } else {
+            $result = "Error creando la colección 'Leídos': " . $conn->error;
+        }
     }
 
 } else {
-    $result = "Falta información de usuario. ";
+    $result = "Falta información del usuario.";
 }
 
-$conn->close();
 $response[] = array("result" => $result);
 echo json_encode($response);
+
 ?>
 
 

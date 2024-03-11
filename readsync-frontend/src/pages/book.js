@@ -4,6 +4,7 @@ import { Header, Loader } from "./home";
 import { useAuth } from '../components/AuthContext';
 import '../stylesheets/book.css';
 import ReadForm from "../components/readForm";
+import MsgPopup from "../components/msgPopup";
 
 function Book(){
 	const [data, setData] = useState([]);
@@ -13,7 +14,7 @@ function Book(){
 	const navigate = useNavigate();
 
 	const [popup, setPopup] = useState(false);
-	const [popupMsg, setPopupMsg] = useState(false);
+	//const [popupMsg, setPopupMsg] = useState(false);
 	const [collectionForm, setCollectionForm] = useState(false);
 	const [showMore, setShowMore] = useState(false);
 	const [form, setForm] = useState(false);
@@ -179,22 +180,14 @@ function Book(){
 
 	return(
 		<>	
-			<Header/>
-			
 
 			{loading ? (<Loader />)
 			:(<section id="book-section">
 			{error && (
-				<div className="popup-msg">
-					<span>{`${error}`}</span> 
-				</div>
+				<MsgPopup error={error} setError={setError}/>
 			)}
 
-			{error && (
-					setTimeout(() => {
-						setError(null); 
-				}, 3000)
-				)}
+			
 		
 
 			{/* COLUMNA IZQUIERDA */}
@@ -207,7 +200,8 @@ function Book(){
 				<button onClick={() => {
 						handlePopup();
 						getCollections(user);
-					}}>+ Añadir a colección</button>
+					}}>+ Añadir a colección
+				</button>
 			</div>
 
 			{/* COLUMNA DERECHA */}

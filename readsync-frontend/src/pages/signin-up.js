@@ -3,7 +3,7 @@ import SignUp from '../components/sign-up';
 import SignIn from '../components/sign-in';
 import { useState } from 'react';
 
-function Signin_up() {
+function SigninUp() {
 
   const [showComponent, setShowComponent] = useState(true);
   const [showComponent2, setShowComponent2] = useState(true);
@@ -29,4 +29,4 @@ function Signin_up() {
   );
 }
 
-export default Signin_up;
+export default SigninUp;

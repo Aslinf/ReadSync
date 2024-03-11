@@ -1,59 +1,44 @@
-import { Header } from "./home";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../components/AuthContext";
+import { useState } from "react";
 import "../stylesheets/library.css";
-import { Loader } from "./home";
+import ShowCollections from "../components/showCollections";
+import MsgPopup from "../components/msgPopup";
 
 function Library() {
 
-	const { user } = useAuth();
-	const [collectionData, setCollectionData] = useState("");
-	const [loading, setLoading] = useState("");
-	const [error, setError] = useState("");
-	const fetchURL = "http://localhost:80/readsync/backend/getCollections.php";
+  //const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [error, setError] = useState(null);
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-					const response = await fetch(fetchURL, {
-							method: 'POST',
-							headers: {
-									'Content-Type': 'application/json'
-							},
-							body: JSON.stringify({ user: user })
-					});
-					const json = await response.json();
-					setCollectionData(json);
-			} catch (err) {
-					setError(err.message);
-			} finally {
-					setLoading(false);
-			}
-	}
-	fetchData();
-	}, )
+
+  const deleteData = async (id, type) => {
+    try {
+      const response = await fetch('http://localhost:80/readsync/backend/deleteData.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          id: id, 
+          type: type
+        })
+      });
+      const data = await response.json();
+      /*
+      if (data.result === "Book deleted successfully" || data.result === "Collection deleted successfully") {
+        setDeleteSuccess(true);
+      } else {
+        setError(data.result);
+      }*/
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
 	return(
 		<>
-			<Header />
+      {error && (<MsgPopup error={error} setError={setError}/>)}
 
-			{loading ? (<Loader />)
-				:(<section id="library-section">
-				{error && (<div>{`${error}`}</div>)}
-				
-				{collectionData[0] && collectionData[0].result && collectionData[0].result.length > 0 && (
-							collectionData[0].result.map((data, index) => (
-								<Link key={index} to={`/biblioteca/${data.nombre}`}>
-									<div className="collection-container">
-										<p className="collection-name">{data.nombre}</p>
-									</div>
-								</Link>
-							))
-						)}
-
-			</section>
-			)}
+			<ShowCollections deleteData={deleteData} />
+			
 		</>
 	)
 }

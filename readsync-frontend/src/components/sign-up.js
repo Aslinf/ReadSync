@@ -146,9 +146,7 @@ function SignUp(){
     <>
       <h2>Registrate</h2>
         <p>
-          {
-            msg !== "" ? <span className='success'>{msg}</span> : <span className='error'>{error}</span>
-          }
+          {msg !== "" ? <span className='success'>{msg}</span> : <span className='error'>{error}</span>}
         </p>
         <label>Usuario
         <input 
