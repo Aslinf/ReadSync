@@ -10,7 +10,7 @@ body .signin-up {
     color: var(--dark-brown-color);
 }
 
-span {
+.signin-up-buttons {
     border: none;
     background-color: white;
     cursor: pointer;

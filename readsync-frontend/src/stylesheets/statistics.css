@@ -1,0 +1,94 @@
+#statistics-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--dark-brown-color);
+}
+
+#statistics-section > .text-stadistics {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 20px;
+}
+
+/* Num Books */
+
+#statistics-section > .text-stadistics > .num-books {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 50px;
+    margin: 60px 20px 20px;
+    padding: 25px;
+    color: var(--dark-brown-color);
+    font-size: large;
+    font-weight: 400;
+    background-color: #eee5da;
+    border: 1px #bf9678 solid;
+    border-radius: 20px;
+}
+
+/* Book Pages */
+
+#statistics-section > .text-stadistics > .book-pages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 60px 20px 20px;
+    padding: 20px;
+    background-color: #e4d4c4;
+    border: 1px #a46c52 solid;
+    border-radius: 20px;
+}
+
+.book-pages > .book-pages-books {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+    padding: 10px;
+}
+
+.book-pages-books > .book {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+    text-decoration: none;
+    color: var(--dark-brown-color);
+}
+
+.book p:first-child {
+    font-weight: 600;
+}
+
+
+
+#statistics-section > .graphics {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 50px 150px;
+    align-items: center;
+    justify-content: center;
+    row-gap: 70px;
+    column-gap: 50px;
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.graphics .book-categories {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chart-title {
+    font-size: 20px;
+    font-weight: 600;
+    padding-bottom: 30px;
+}

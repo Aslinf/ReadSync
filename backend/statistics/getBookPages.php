@@ -93,7 +93,7 @@ if ($user !== "") {
 }
 
 $conn->close();
-$response[] = array("result" => $result);
+$response[] = array($result);
 echo json_encode($response);
 ?>
 

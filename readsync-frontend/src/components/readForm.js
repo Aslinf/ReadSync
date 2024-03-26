@@ -1,6 +1,15 @@
+import ReactStars from "react-rating-stars-component";
+import "../stylesheets/book.css";
+
 
 const ReadForm = ({ setForm, setPopup, handleInputChange, handleAddCollection, data }) => {
-    return(
+    
+  const ratingChanged = (newRating) => {
+    console.log(newRating)
+    handleInputChange(newRating, "formRating");
+  };
+  
+  return(
       <>
         <div className="overlay">
           <div className="popup">
@@ -8,60 +17,72 @@ const ReadForm = ({ setForm, setPopup, handleInputChange, handleAddCollection, d
             <span className="close-popup" onClick={() => 
               {setForm(false);
               setPopup(true)}}>X</span>
+
+            <label for="calificacion">Calificación:</label>
+            <ReactStars 
+              count={5}
+              size={40}
+              value={0}
+              isHalf={true}
+              color={"#e4d4c4"}
+              activeColor={"#895845"}
+
+              onChange={ratingChanged}
+            />
             
-              <div>
-                <label> 
+            <div className="add-leidos-form-content">
+              <div className="form-content-format">
+                <div className="format-form-option">
+              
                   <input 
-                  type="radio"
-                  id="fisico"
-                  name="formato"
-                  value="Fisico"
-                  onChange={(e)=> handleInputChange(e, "formFormat")}
-                  /> Físico
-                </label>
-
-                <label> 
+                      type="radio"
+                      id="fisico"
+                      name="formato"
+                      value="Fisico"
+                      onChange={(e)=> handleInputChange(e, "formFormat")}
+                  /> 
+                  <label> Físico </label>
+                </div>
+                
+                <div className="format-form-option">
+                  
                   <input 
-                  type="radio"
-                  id="audio"
-                  name="formato"
-                  value="Audio libro"
-                  onChange={(e)=> handleInputChange(e, "formFormat")}
-                  /> Audio Libro
-                </label>
-
-                <label> 
+                    type="radio"
+                    id="audio"
+                    name="formato"
+                    value="Audio libro"
+                    onChange={(e)=> handleInputChange(e, "formFormat")}
+                  />
+                  <label>Audio Libro</label>
+                </div>
+                
+                <div className="format-form-option">
+                  
                   <input 
-                  type="radio"
-                  id="digital"
-                  name="formato"
-                  value="Digital"
-                  onChange={(e)=> handleInputChange(e, "formFormat")}
-                  /> Digital
-                </label>
+                    type="radio"
+                    id="digital"
+                    name="formato"
+                    value="Digital"
+                    onChange={(e)=> handleInputChange(e, "formFormat")}
+                  />
+                  <label>Digital</label>
+                </div>
+                
               </div>
-              <label for="calificacion">Calificación:</label>
-
-              <select id="calificacion" name="calificacion" onChange={(e)=> handleInputChange(e, "formRating")}>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
+              
 
               <textarea 
+              placeholder="Escribe un comentario"
               onChange={(e)=> handleInputChange(e, "formComment")}/>
+            </div>
               
-              <input 
-								type="submit"
-								defaultValue="submit"
-								className='add-collection'
-								onClick={() => handleAddCollection(data, "Leídos")}
-							/>
-              
-         
-        </div>
+            <input 
+              type="submit"
+              defaultValue="submit"
+              className='add-collection-button center'
+              onClick={() => handleAddCollection("Leídos", data.id_coleccion)}
+            />
+          </div>
         </div>
       </>
     )

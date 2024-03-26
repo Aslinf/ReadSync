@@ -10,7 +10,9 @@
     margin-top: 40px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     column-gap: 50px;
+    row-gap: 50px;
 }
 
 .book-container {
@@ -18,12 +20,28 @@
     justify-content: center;
     align-items: center;
     padding: 10px;
-    height: 230px;
     background-color: var(--dark-cream-color);
     border-radius: 15px;
+    border: 1px solid #d3b79e;
+    box-shadow: 11px 11px 15px -3px rgba(0,0,0,0.1);
 }
 
-.book-container > p{
+.book-leidos-container-size {
+    height: 230px;
+    width: 320px;
+}
+
+.book-leidos-container-size:hover {
+    height: 245px;
+    width: 335px;
+    transition: all 0.5s ease-out;
+}
+
+.book-container-size:hover {
+    height: 200%;
+}
+
+.book-container > p:first-child{
     color: black;
     padding: 5px;
     text-decoration: none;
@@ -33,3 +51,19 @@
 .book-container > Link {
     cursor: pointer;
 }
+
+.book-container > Link > img {
+    box-shadow: 21px 23px 15px -3px rgba(0,0,0,0.1);
+}
+
+.book-info {
+    align-items: flex-start;
+    row-gap: 5px;
+    padding-left: 10px;
+    color: var(--dark-brown-color);
+}
+
+.book-info .react-stars > span {
+    background-color: #eee5da;
+}
+  

@@ -2,7 +2,7 @@ import '../stylesheets/home.css'
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
-import Logout from '../components/log-out';
+import Logout from '../components/Logout';
 
 const Header = () => {
   const { isAuthenticated, setIsAuthenticated, user, token } = useAuth();

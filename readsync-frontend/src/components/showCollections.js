@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../components/AuthContext";
+import { useAuth } from "./AuthContext";
 import "../stylesheets/library.css";
-import MsgPopup from "./msgPopup";
+import MsgPopup from "./MsgPopup";
 import { Loader } from "../pages/home";
 
 function ShowCollections({ deleteData }) {
@@ -47,6 +47,8 @@ function ShowCollections({ deleteData }) {
         }
     };
 
+    console.log(collectionData);
+
     return (
         <>
             {loading ? (<Loader />)
@@ -54,18 +56,17 @@ function ShowCollections({ deleteData }) {
                     <section id="library-section">
                         {error && error !== "Falta información de usuario" && (<MsgPopup error={error} setError={setError}/>)}
 
-                        {collectionData.length > 0 && collectionData[0]?.result && collectionData[0].result.length > 0 && (
+                        {collectionData.length > 0 && collectionData[0]?.result !== `Ninguna colección de ${user}` 
+                        ? collectionData.length > 0 && collectionData[0]?.result && collectionData[0].result.length > 0 && (
                             collectionData[0].result.map((data, index) => (
                                 <div key={index} className="collection-container">
                                     <p onClick={() => handleDeleteCollection(data.id_coleccion)}>X</p>
                                     <Link to={`/biblioteca/${data.nombre}`} >
-                                        <div>
-                                            <p className="collection-name">{data.nombre}</p>
-                                        </div>
+                                        <p className="collection-name">{data.nombre}</p>
                                     </Link>
                                 </div>
                             ))
-                        )}
+                        ) : <div className="noInfo">No hay colecciones</div>}
 
                     </section>
                 )}

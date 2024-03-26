@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../stylesheets/library.css";
-import ShowCollections from "../components/showCollections";
-import MsgPopup from "../components/msgPopup";
+import ShowCollections from "../components/ShowCollections";
+import MsgPopup from "../components/MsgPopup";
 
 function Library() {
 
@@ -21,13 +21,6 @@ function Library() {
           type: type
         })
       });
-      const data = await response.json();
-      /*
-      if (data.result === "Book deleted successfully" || data.result === "Collection deleted successfully") {
-        setDeleteSuccess(true);
-      } else {
-        setError(data.result);
-      }*/
     } catch (err) {
       setError(err.message);
     }

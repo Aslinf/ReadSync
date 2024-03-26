@@ -1,8 +1,9 @@
 import { useParams, Link } from "react-router-dom";
-import { useAuth } from "../components/AuthContext";
+import { useAuth } from "./AuthContext";
 import { useState, useEffect } from "react";
 import { Loader } from "../pages/home";
-import MsgPopup from "./msgPopup";
+import MsgPopup from "./MsgPopup";
+import ReactStars from "react-rating-stars-component";
 import "../stylesheets/collection-books.css";
 
 function CollectionBooks() {
@@ -66,7 +67,6 @@ function CollectionBooks() {
     if (deleteSuccess) {
       window.location.reload(); 
     }
-  
     
   return(
     <>
@@ -79,18 +79,50 @@ function CollectionBooks() {
         <h2>{collection}</h2>
 				
         <div className="books-section">
-          {bookData[0] && bookData[0]?.result && bookData[0]?.result?.length > 0 && (
-							bookData[0].result.map((data, index) => (
-                <div key={index} className="book-container">
-                  <p onClick= {() => deleteData(data.idLibro, "book")}>X</p>
-                  <Link to={`/libro/${data.ID}`}>
-                    <div >
-                      <img src={`${data.portada}`} alt="Portada libro"/>
+          {}
+
+            {collection === "Leídos" ? (bookData[0] && bookData[0]?.result && bookData[0]?.result?.length > 0 && (
+                bookData[0].result.map((data, index) => (
+                  <div key={index} className="book-container book-leidos-container-size">
+                    <p onClick= {() => deleteData(data.idLibro, "book")}><strong>X</strong></p>
+                    <Link to={`/libro/${data.ID}`}>
+                      {data.portada === "" ? ("") : <img src={`${data.portada}`} alt="Portada libro"/> }
+                    </Link>
+                    <div className="center book-info">
+                      <Link to={`/libro/${data.ID}`}>
+                        <p>{data.nombre}</p>
+                      </Link>
+                      <ReactStars 
+                        count={5}
+                        size={30}
+                        value={data.calificacion}
+                        isHalf={true}
+                        color={"#d3b79e"}
+                        activeColor={"#895845"}
+                        edit={false}
+                      />
+                      <p><strong>Formato:</strong>{data.formato}</p>
+                      <p>{data.comentario}</p>
+                      
                     </div>
-                  </Link>
-                </div>
-							))
-						)}
+                  </div>
+                ))
+              )) 
+
+              :(bookData[0] && bookData[0]?.result && bookData[0]?.result?.length > 0 && (
+                bookData[0].result.map((data, index) => (
+                  <div key={index} className="book-container center book-container-size">
+                    <p onClick= {() => deleteData(data.idLibro, "book")}><strong>X</strong></p>
+                    
+                    <Link to={`/libro/${data.ID}`} className="center">
+                      <p>{data.nombre}</p>
+                      {data.portada === "" ? ("") : <img src={`${data.portada}`} alt="Portada libro"/> }
+                    </Link>
+                  </div>
+                ))
+              ))
+            }
+            
         </div>
 				
       </section>)

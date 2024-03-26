@@ -1,6 +1,6 @@
 import '../stylesheets/signin-up.css';
-import SignUp from '../components/sign-up';
-import SignIn from '../components/sign-in';
+import SignUp from '../components/SignUp';
+import SignIn from '../components/SignIn';
 import { useState } from 'react';
 
 function SigninUp() {
@@ -20,8 +20,8 @@ function SigninUp() {
         <div className='form'>
         {showComponent ? <SignUp /> : <SignIn />}
         {showComponent2 
-          ? <p>Si ya tienes una cuenta <span onClick={toggleComponent}>Inicia sesión</span></p>
-        : <p>Si aún no tienes cuenta <span onClick={toggleComponent}>Registrate</span></p>}
+          ? <p>Si ya tienes una cuenta <span className='signin-up-buttons' onClick={toggleComponent}>Inicia sesión</span></p>
+        : <p>Si aún no tienes cuenta <span className='signin-up-buttons' onClick={toggleComponent}>Registrate</span></p>}
         
         </div>
       </div>

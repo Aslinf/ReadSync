@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Header, Loader } from "./home";
+import { Loader } from "./home";
 import { useAuth } from '../components/AuthContext';
 import '../stylesheets/book.css';
-import ReadForm from "../components/readForm";
-import MsgPopup from "../components/msgPopup";
+import ReadForm from "../components/ReadForm";
+import MsgPopup from "../components/MsgPopup";
 
 function Book(){
 	const [data, setData] = useState([]);
@@ -22,7 +22,8 @@ function Book(){
 	const { bookId } = useParams();
 
 	const APIKey = "AIzaSyBMESbDd7GPd7uKJgr-KFz0A6U5j6CMfA8";
-  const api = `https://www.googleapis.com/books/v1/volumes?q=intitle:${bookId}&key=${APIKey}&maxResults=10`;
+	const api = `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${APIKey}`
+  //const api = `https://www.googleapis.com/books/v1/volumes?q=intitle:${bookId}&key=${APIKey}`;
 
 	const [title, setTitle] = useState("");
 	const [subject, setSubject] = useState("");
@@ -33,6 +34,7 @@ function Book(){
 	const [rating, setRating] = useState("");
 	const [format, setFormat] = useState("");
 	const [cover, setCover] = useState("");
+	const [categories, setCategories] = useState([]);
 	const [collectionName, setCollectionName] = useState("");
 
 	const [collectionData, setCollectionData] = useState("");
@@ -44,13 +46,14 @@ function Book(){
         const json = await response.json();
         setData(json);
 
-				if (json && json.items && json.items.length > 0) {
-					const firstItem = json.items[0].volumeInfo;
+				if (json && Object.keys(json).length > 0) {
+					const firstItem = json.volumeInfo;
 					setTitle(firstItem.title);
 					setAuthor(firstItem.authors ? firstItem.authors[0] : '');
-					setBookAPIId(json.items[0].id);
+					setBookAPIId(json.id);
 					setPages(firstItem.pageCount);
-					setCover(firstItem.imageLinks ? firstItem.imageLinks.thumbnail : '');
+					setCover(firstItem.imageLinks && firstItem.imageLinks.large ? firstItem.imageLinks.thumbnail : '');
+					setCategories(extractCategories(firstItem.categories));
 			}
       } catch(err) {
         setError(err.message);
@@ -61,6 +64,20 @@ function Book(){
     getData();
 
   }, [api]);
+
+
+	//Extraemos las categorias de la api y las ponemos en el formato adecuado para guardar
+	const extractCategories = (arr) => {
+		const wordSet = new Set();
+		if(arr){
+			arr.forEach(str => {
+				const words = str.split(/\s*\/\s*/); 
+				words.forEach(word => wordSet.add(word)); 
+			});
+		}
+		return Array.from(wordSet); 
+	};
+	
 
 // mostrar pop-up o no según inicio sesión
 	const handlePopup = () => {
@@ -91,15 +108,16 @@ function Book(){
 				break;
 			case "formRating":
 				setError("");
-        setRating(e.target.value);
+        setRating(e);
         break;
+				
 			default:
 				break;
 		}
 	}
 
-	//Añadimos los libros a colleciones
-	function handleAddCollection(data, value, collectionID){
+	//Añadimos los libros a colecciones
+	function handleAddCollection(value, collectionID){
 
 		if(title !== "" && user != ""){
       var headers = {
@@ -110,7 +128,7 @@ function Book(){
       var Data = {
 				user: user,
         title: title,
-				subject: subject,
+				categories: categories.toString(),
 				ID: bookAPIId,
         author: author,
         pages: pages,
@@ -128,7 +146,7 @@ function Book(){
 			} else if (value === "noExiste") {
 				var fetchURL = "http://localhost:80/readsync/backend/createCollection.php";
 			} else if (value === "Leídos") {
-				var fetchURL = "http://localhost:80/readsync/backend/addBookLeidos.php";;
+				var fetchURL = "http://localhost:80/readsync/backend/addBookLeidos.php";
 			}
 
       fetch(fetchURL, {
@@ -178,6 +196,8 @@ function Book(){
 			fetchData();
 	}
 
+
+
 	return(
 		<>	
 
@@ -187,14 +207,13 @@ function Book(){
 				<MsgPopup error={error} setError={setError}/>
 			)}
 
-			
-		
-
+	
 			{/* COLUMNA IZQUIERDA */}
 			<div className="left-column">
 				{/* Mostrarmos la imagen si hay */}
-				{data.items[0].volumeInfo && data.items[0].volumeInfo.imageLinks && data.items[0].volumeInfo.imageLinks.thumbnail ? (
-					<img src={`${data.items[0].volumeInfo.imageLinks.thumbnail}`} alt={`Portada de ${data.items[0].volumeInfo.title}`}/>
+
+				{cover && cover.length > 0 ? (
+					<img src={`${cover}`} alt={`Portada de ${title}`}/>
 				): (<div>No hay imagen disponible</div>)}
 				
 				<button onClick={() => {
@@ -204,47 +223,51 @@ function Book(){
 				</button>
 			</div>
 
+
 			{/* COLUMNA DERECHA */}
 			<div className="right-column">
-				<h2> {data.items[0].volumeInfo.title}</h2>
+				<h2> {title}</h2>
 
 				{/* Mostramos subtitulo si hay */}
-				{data.items[0].volumeInfo && data.items[0].volumeInfo.subtitle ? (
-					<p>{data.items[0].volumeInfo.subtitle}</p>
+				{data.volumeInfo && data.volumeInfo.subtitle ? (
+					<p>{data.volumeInfo.subtitle}</p>
 				): ("")}
 
 				{/* Mostramos descripcion si hay */}
-				{data.items[0].volumeInfo && data.items[0].volumeInfo.description ? (
+				{data.volumeInfo && data.volumeInfo.description ? (
 					<div className="book-description">
-					
-						<p>{showMore ? `${data.items[0].volumeInfo.description}` : `${data.items[0].volumeInfo.description.substring(0, 250)}`}</p>
-						<p className="show-description-button" onClick={() => setShowMore(!showMore)}>
-							{showMore ? "Mostar menos" : "Mostrar más"}
-						</p>
+						<div dangerouslySetInnerHTML={{ __html: showMore ? data.volumeInfo.description : `${data.volumeInfo.description.substring(0, 250)}` }} />
+						{data.volumeInfo.description.length > 250 && (
+							<p className="show-description-button" onClick={() => setShowMore(!showMore)}>
+								{showMore ? "Mostar menos" : "Mostrar más"}
+							</p>
+						)}
 					</div>
-				): (<div>No hay descripción disponible</div>)}
+				) : (
+					<div>No hay descripción disponible</div>
+				)}
 
 				{/* Mostramos número de páginas si hay */}
-				{data.items[0].volumeInfo && data.items[0].volumeInfo.pageCount ? (
-					<p value={pages} className="book-data"><b>Número de páginas:</b> {data.items[0].volumeInfo.pageCount}</p>
+				{pages ? (
+					<p value={pages} className="book-data"><b>Número de páginas:</b> {pages}</p>
 				): ("")}
 
 				{/* Mostramos autor si hay */}
-				{data.items[0].volumeInfo && data.items[0].volumeInfo.authors && data.items[0].volumeInfo.authors.length > 0 ? (
-					<p value={author} className="book-data"><b>Autor:</b> {data.items[0].volumeInfo.authors}</p>
+				{author ? (
+					<p value={author} className="book-data"><b>Autor:</b> {author}</p>
 				): ("")}
 
 				{/* Mostramos editorial si hay */}
-				{data.items[0].volumeInfo && data.items[0].volumeInfo.publisher ? (
-					<p className="book-data"><b>Editorial:</b> {data.items[0].volumeInfo.publisher}</p>
+				{data.volumeInfo && data.volumeInfo.publisher ? (
+					<p className="book-data"><b>Editorial:</b> {data.volumeInfo.publisher}</p>
 				): ("")}
 
 				{/* Mostramos categorías del libro si hay */}
 				<div className="book-subjects">
 					<span>Categorías: </span>
 					<ul>
-						{data.items && data.items[0].volumeInfo && data.items[0].volumeInfo.categories && data.items[0].volumeInfo.categories.length > 0 ? (
-						data.items[0].volumeInfo.categories.map((category, index) => (
+						{data.volumeInfo && data.volumeInfo.categories && data.volumeInfo.categories.length > 0 ? (
+						data.volumeInfo.categories.map((category, index) => (
 								<li key={index}>{category}</li>
 						))
 						) : ""}
@@ -257,6 +280,8 @@ function Book(){
 				</div>) : ("")}
 
 			</div>
+
+
 
 			{form ? 
 				<ReadForm 
@@ -279,19 +304,21 @@ function Book(){
 					setPopup(false);}}>X</span>
 					<div className="popup-content">
 						<button
+							className="add-collection-button"
 							onClick={() => {setForm(!form); setPopup(false)}}
 						>Leídos</button>
 
-				{collectionData && collectionData[0] && Array.isArray(collectionData[0].result) && collectionData[0].result.length > 0 && (
-						collectionData[0].result.map((data, index) => (
-								// miramos si data.nombre no es igual a "Leídos" para no mostrarla dos veces
-								data.nombre !== "Leídos" &&
-								<button 
+					{collectionData && collectionData[0] && Array.isArray(collectionData[0].result) && collectionData[0].result.length > 0 && (
+							collectionData[0].result.map((data, index) => (
+									// miramos si data.nombre no es igual a "Leídos" para no mostrarla dos veces
+									data.nombre !== "Leídos" &&
+									<button 
+										className="add-collection-button"
 										key={index}
-										onClick={() => handleAddCollection(data, "Existe", data.id_coleccion)}
-								>{data.nombre}</button>
-						))
-				)}
+										onClick={() => handleAddCollection("Existe", data.id_coleccion)}
+									>{data.nombre}</button>
+							))
+					)}
 
 						{collectionForm ? <div className="collectionForm">
 							<input 
@@ -305,7 +332,7 @@ function Book(){
 								type="submit"
 								defaultValue="submit"
 								className='add-collection'
-								onClick={() => handleAddCollection(data, "noExiste")}
+								onClick={() => handleAddCollection("noExiste", data.id_coleccion)}
 								/>
 							
 						</div> : ""}

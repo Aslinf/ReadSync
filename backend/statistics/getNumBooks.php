@@ -40,7 +40,7 @@ if ($user !== "") {
     $stmt_unique_books->fetch();
     $stmt_unique_books->close();
 
-    // SQL query que cueanta solo los libros leídos del usuario
+    // SQL query que cuenta solo los libros leídos del usuario
     $sql_unique_books_read = "SELECT COUNT(DISTINCT l.ID) AS unique_books_read_count
                               FROM USUARIOS u
                               JOIN LIBROS l ON u.id_usuario = l.id_usuario
@@ -69,7 +69,7 @@ if ($user !== "") {
 }
 
 $conn->close();
-$response[] = array("result" => $result);
+$response[] = array($result);
 echo json_encode($response);
 ?>
 

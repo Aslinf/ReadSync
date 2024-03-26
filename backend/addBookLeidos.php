@@ -23,7 +23,7 @@ if ($dData === null) {
 
 $user = $dData['user'];
 $bookName = $dData['title'];
-$genre = $dData['subject'];
+$categories = $dData['categories'];
 $ID = $dData['ID'];
 $author = $dData['author'];
 $pages = $dData['pages'];
@@ -70,7 +70,7 @@ if ($user !== "") {
                                                 portada = COALESCE(NULLIF(?, ''), portada) 
                               WHERE id_libro = ?";
             $stmtUpdateBook = $conn->prepare($sqlUpdateBook);
-            $stmtUpdateBook->bind_param("ssssssssi", $genre, $ID, $author, $pages, $comment, $rating, $format, $portada, $bookId);
+            $stmtUpdateBook->bind_param("ssssssssi", $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $bookId);
             $stmtUpdateBook->execute();
 
             if ($stmtUpdateBook->affected_rows > 0) {
@@ -84,7 +84,7 @@ if ($user !== "") {
             // El libro no está en la colección "Leídos", lo añadimos
             $sqlInsertBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
             $stmtInsertBook = $conn->prepare($sqlInsertBook);
-            $stmtInsertBook->bind_param("ssssssisss", $bookName, $genre, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
+            $stmtInsertBook->bind_param("ssssssdsss", $bookName, $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
             $stmtInsertBook->execute();
 
             if ($stmtInsertBook->affected_rows > 0) {
@@ -122,7 +122,7 @@ if ($user !== "") {
             // Ahora añadimos el libro a la colección "Leídos"
             $sqlInsertBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
             $stmtInsertBook = $conn->prepare($sqlInsertBook);
-            $stmtInsertBook->bind_param("ssssssisss", $bookName, $genre, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
+            $stmtInsertBook->bind_param("ssssssdsss", $bookName, $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
             $stmtInsertBook->execute();
 
             if ($stmtInsertBook->affected_rows > 0) {

@@ -23,7 +23,7 @@ if ($dData === null) {
 
 $user = $dData['user'];
 $bookName = $dData['title'];
-$genre = $dData['subject'];
+$categories = $dData['categories'];
 $ID = $dData['ID'];
 $author = $dData['author'];
 $pages = $dData['pages'];
@@ -42,7 +42,7 @@ if ($user !== "") {
     $sqlBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, id_usuario) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
     $stmtBook = $conn->prepare($sqlBook);
-    $stmtBook->bind_param("ssssssisss", $bookName, $genre, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
+    $stmtBook->bind_param("ssssssdsss", $bookName, $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
     $stmtBook->execute();
 
     if ($stmtBook->affected_rows > 0) {
