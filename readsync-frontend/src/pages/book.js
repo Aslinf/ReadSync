@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Loader } from "./home";
 import { useAuth } from '../components/AuthContext';
 import '../stylesheets/book.css';
 import ReadForm from "../components/ReadForm";
 import MsgPopup from "../components/MsgPopup";
+import Carrousel from "../components/Carrousel";
 
 function Book(){
 	const [data, setData] = useState([]);
@@ -84,7 +85,7 @@ function Book(){
 		isAuthenticated ? (
 			setPopup(!popup)
 		) : (
-			navigate("/signin-up")
+			navigate("/sesion")
 		)	 
 	}
 
@@ -196,6 +197,17 @@ function Book(){
 			fetchData();
 	}
 
+	const navRef = useRef(null);
+	const handleNavCategories = (direction) => {
+    if (navRef.current) {
+      if (direction === 'left') {
+        navRef.current.scrollLeft -= 200;
+      } else {
+        navRef.current.scrollLeft += 200;
+      }
+    }
+  };
+
 
 
 	return(
@@ -216,7 +228,7 @@ function Book(){
 					<img src={`${cover}`} alt={`Portada de ${title}`}/>
 				): (<div>No hay imagen disponible</div>)}
 				
-				<button onClick={() => {
+				<button className="add-to-collection-button" onClick={() => {
 						handlePopup();
 						getCollections(user);
 					}}>+ Añadir a colección
@@ -227,6 +239,7 @@ function Book(){
 			{/* COLUMNA DERECHA */}
 			<div className="right-column">
 				<h2> {title}</h2>
+
 
 				{/* Mostramos subtitulo si hay */}
 				{data.volumeInfo && data.volumeInfo.subtitle ? (
@@ -263,24 +276,15 @@ function Book(){
 				): ("")}
 
 				{/* Mostramos categorías del libro si hay */}
-				<div className="book-subjects">
-					<span>Categorías: </span>
-					<ul>
-						{data.volumeInfo && data.volumeInfo.categories && data.volumeInfo.categories.length > 0 ? (
-						data.volumeInfo.categories.map((category, index) => (
-								<li key={index}>{category}</li>
-						))
-						) : ""}
-					</ul>
-				</div>
-
-				{data && data.valoración ? (
-				<div className="user-book-rating">
-						<p>Mi valoración: {data.valoración}</p>
-				</div>) : ("")}
+				{data.volumeInfo && data.volumeInfo.categories && data.volumeInfo.categories.length > 0 ? (
+					<Carrousel 
+						data={data.volumeInfo.categories} 
+						title={"Géneros"}
+					/>
+				) : ""}
+				
 
 			</div>
-
 
 
 			{form ? 

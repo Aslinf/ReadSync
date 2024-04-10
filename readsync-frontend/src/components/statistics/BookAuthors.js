@@ -4,9 +4,16 @@ import { Doughnut } from "react-chartjs-2";
 
 
 const BookAuthors = ({ bookAuthorData }) => {
-	//console.log(bookAuthorData);
 	const [authorsData, setAuthorsData] = useState([]);
 	const [authorsDataLabel, setAuthorsDataLabel] = useState([]);
+
+	const [colors, setColors] = useState([]);
+
+	function randomColor(array){
+		for(let i = 0; i < array.length; i++){
+			colors.push('#'+Math.floor(Math.random()*16777215).toString(16));
+		}
+	}
 
 	useEffect(() => {
 		const getData = () => {
@@ -16,15 +23,15 @@ const BookAuthors = ({ bookAuthorData }) => {
 						dataLabels.push(author);
 						data.push(number);
 				});
+			randomColor(data);
 			setAuthorsData(data);
 			setAuthorsDataLabel(dataLabels);
 		};
-
 	getData();
-	}, [bookAuthorData])
+	}, [bookAuthorData]);
 
-	const colors= ['#f9f6f3', '#e4d4c4', '#d2b89f', '#bf9678', '#b27e5d', '#a46c52', '#895845', '#6f483d', '#5b3c33', '#301f1a'];
-	
+	console.log(colors);
+
 	return(
 		<>
 		<div className="book-authors center">

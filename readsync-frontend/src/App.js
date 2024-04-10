@@ -14,11 +14,11 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Home />} >
-        <Route path='/perfil' element={<Profile/>} />
+        <Route path='/perfil' element={<PrivateRoute> <Profile/> </PrivateRoute>} />
         <Route path='/libro/:bookId' element={<Book />} />
         <Route path='/busqueda/:book' element={<Search />} />
-        <Route path='/biblioteca' element={<Library/> } />
-        <Route path='/biblioteca/:collection' element={<CollectionBooks />} />
+        <Route path='/biblioteca' element={<PrivateRoute> <Library/> </PrivateRoute> } />
+        <Route path='/biblioteca/:collection' element={<PrivateRoute> <CollectionBooks /> </PrivateRoute>} />
         <Route path='/estadisticas' element={<PrivateRoute> <Statistics /> </PrivateRoute>} />
         <Route path="*" element={<NoMatch />} />
       </Route>   

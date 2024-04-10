@@ -9,6 +9,14 @@ function BookCategories({ bookCategories }) {
 	const [leidosGenresData, setLeidosGenresData] = useState([]);
 	const [leidosGenresLabels, setLeidosGenresLabels] = useState([]);
 
+	const [colors, setColors] = useState([]);
+
+	function randomColor(array){
+		for(let i = 0; i < array.length; i++){
+			colors.push('#'+Math.floor(Math.random()*16777215).toString(16));
+		}
+	}
+
 	useEffect(() => {
 		const getData = () => {
 			if(Array.isArray(bookCategories[0]?.all_collections) && bookCategories.length > 0){
@@ -20,6 +28,7 @@ function BookCategories({ bookCategories }) {
 				});
 			setAllGenresData(allData);
 			setAllGenresLabels(allDataLabels);
+			randomColor(allData);
 			
 			const leidosDataLabels = [];
 			const leidosData = [];
@@ -36,11 +45,9 @@ function BookCategories({ bookCategories }) {
 	}, [bookCategories])
 
 
-	const colors= ['#f9f6f3', '#e4d4c4', '#d2b89f', '#bf9678', '#b27e5d', '#a46c52', '#895845', '#6f483d', '#5b3c33', '#301f1a'];
-
 	return(
 		<>
-		<div className="book-categories">
+		<div className="book-categories-graph">
 			{allGenresData.length > 0 && (
 				<div className="charts center">
 					<p className="chart-title ">Géneros en biblioteca: </p>

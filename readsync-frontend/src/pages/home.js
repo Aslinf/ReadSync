@@ -7,6 +7,7 @@ import Logout from '../components/Logout';
 const Header = () => {
   const { isAuthenticated, setIsAuthenticated, user, token } = useAuth();
   const [busqueda, setBusqueda] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +28,10 @@ const Header = () => {
       navigate(`/busqueda/${busqueda}`);
     }
   }
+
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
+  };
  
   return(
     <>
@@ -35,14 +40,27 @@ const Header = () => {
           <h1>ReadSync</h1>
         </Link>
 
-        <div>
+        <div className='search-items'>
           <input type='text' placeholder='Buscar algún libro' className='search-bar' onChange={handleChange} onKeyPress={handleKeyPress}/>
           <Link to={`/busqueda/${busqueda}`} className='search-button'>Buscar</Link>
         </div>
-        
 
+        {/* Mobile menu */}
+        <div className={`menu-mobile ${showMenu ? 'show' : ''}`}>
+          <button className='menu-button-mobile' onClick={toggleMenu}>☰</button>
+          <div className="dropdown-menu mobile-menu">
+            <ul>
+              <li><Link to={"/perfil"}>Perfil</Link></li>
+              <li><Link to={"/biblioteca"}>Biblioteca</Link></li>
+              <li><Link to={"/estadisticas"}>Estadísticas</Link></li>
+              <li><Logout /></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Desktop menu */}
         {isAuthenticated ? (
-          <div className='menu'>
+          <div className='menu-desktop'>
             <button className='menu-button'>¡Hola {user}!</button>
             <div className="dropdown-menu">
               <ul>
@@ -61,7 +79,6 @@ const Header = () => {
       </header>
     </>
   )
-
 }
 
   function Loader() {

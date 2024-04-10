@@ -14,6 +14,7 @@ function CollectionBooks() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [deleteMode, setDeteleMode] = useState(false);
   const fetchURL = "http://localhost:80/readsync/backend/getUserBooks.php"; 
   
     useEffect(() => {
@@ -76,15 +77,20 @@ function CollectionBooks() {
       (<section id="book-library-section">
         {error && (<MsgPopup error={error} setError={setError}/>)}
 
-        <h2>{collection}</h2>
+        <div className="delete-library-container">
+          <h2>{collection}</h2>
+          <button onClick={() => setDeteleMode(!deleteMode)}>Eliminar Libro</button>
+        </div>
 				
         <div className="books-section">
-          {}
 
             {collection === "Leídos" ? (bookData[0] && bookData[0]?.result && bookData[0]?.result?.length > 0 && (
                 bookData[0].result.map((data, index) => (
                   <div key={index} className="book-container book-leidos-container-size">
-                    <p onClick= {() => deleteData(data.idLibro, "book")}><strong>X</strong></p>
+                    <div className={deleteMode ? "delete-true center" : "delete-false" }>
+                      <p onClick= {() => deleteData(data.idLibro, "book")}><strong>X</strong></p>
+                    </div>
+                    
                     <Link to={`/libro/${data.ID}`}>
                       {data.portada === "" ? ("") : <img src={`${data.portada}`} alt="Portada libro"/> }
                     </Link>
@@ -109,12 +115,14 @@ function CollectionBooks() {
                 ))
               )) 
 
+            
               :(bookData[0] && bookData[0]?.result && bookData[0]?.result?.length > 0 && (
                 bookData[0].result.map((data, index) => (
                   <div key={index} className="book-container center book-container-size">
-                    <p onClick= {() => deleteData(data.idLibro, "book")}><strong>X</strong></p>
-                    
-                    <Link to={`/libro/${data.ID}`} className="center">
+                    <div className={deleteMode ? "delete-true center" : "delete-false" }>
+                      <p onClick= {() => deleteData(data.idLibro, "book")}><strong>X</strong></p>
+                    </div>
+                    <Link to={`/libro/${data.ID}`} className="book-gap center">
                       <p>{data.nombre}</p>
                       {data.portada === "" ? ("") : <img src={`${data.portada}`} alt="Portada libro"/> }
                     </Link>

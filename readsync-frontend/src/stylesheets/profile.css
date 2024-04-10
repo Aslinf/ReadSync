@@ -1,0 +1,25 @@
+#profile-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    row-gap: 3rem;
+    padding: 6% 20%;
+}
+
+#profile-section > h2 {
+    font-size: 3rem;
+}
+
+
+.delete-user-button {
+    border: none;
+    background-color: var(--light-cream-color);
+    color: rgb(157, 161, 164);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.hide {
+    visibility: hidden;
+}

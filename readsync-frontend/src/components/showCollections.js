@@ -10,6 +10,7 @@ function ShowCollections({ deleteData }) {
     const [collectionData, setCollectionData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+		const [deleteMode, setDeteleMode] = useState(false);
     const fetchURL = "http://localhost:80/readsync/backend/getCollections.php";
 
     useEffect(() => {
@@ -47,8 +48,6 @@ function ShowCollections({ deleteData }) {
         }
     };
 
-    console.log(collectionData);
-
     return (
         <>
             {loading ? (<Loader />)
@@ -56,17 +55,27 @@ function ShowCollections({ deleteData }) {
                     <section id="library-section">
                         {error && error !== "Falta información de usuario" && (<MsgPopup error={error} setError={setError}/>)}
 
-                        {collectionData.length > 0 && collectionData[0]?.result !== `Ninguna colección de ${user}` 
-                        ? collectionData.length > 0 && collectionData[0]?.result && collectionData[0].result.length > 0 && (
-                            collectionData[0].result.map((data, index) => (
-                                <div key={index} className="collection-container">
-                                    <p onClick={() => handleDeleteCollection(data.id_coleccion)}>X</p>
-                                    <Link to={`/biblioteca/${data.nombre}`} >
-                                        <p className="collection-name">{data.nombre}</p>
-                                    </Link>
-                                </div>
-                            ))
-                        ) : <div className="noInfo">No hay colecciones</div>}
+												<div className="delete-library-container">
+													<h2>Biblioteca</h2>
+													<button onClick={() => setDeteleMode(!deleteMode)}>Eliminar Colección</button>
+												</div>
+
+												<div className="library-collections">
+													{collectionData.length > 0 && collectionData[0]?.result !== `Ninguna colección de ${user}` 
+													? collectionData.length > 0 && collectionData[0]?.result && collectionData[0].result.length > 0 && (
+															collectionData[0].result.map((data, index) => (
+																	<div key={index} className="collection-container center">
+																		<div className={deleteMode ? "delete-true center" : "delete-false" }>
+																			<p onClick={() => handleDeleteCollection(data.id_coleccion)}>X</p>
+																		</div>
+																		<Link to={`/biblioteca/${data.nombre}`} >
+																				<p className="collection-name">{data.nombre}</p>
+																		</Link>
+																	</div>
+															))
+													) : <div className="noInfo">No hay colecciones</div>}
+												</div>
+                        
 
                     </section>
                 )}

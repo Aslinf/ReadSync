@@ -1,19 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../components/AuthContext";
 import { useNavigate } from "react-router-dom";
 import MsgPopup from "../components/MsgPopup";
+import "../stylesheets/profile.css";
+import Carrousel from "../components/Carrousel";
 
 function Profile() {
 	const { user, logout, isAuthenticated } = useAuth();
 	const navigate = useNavigate();
+	const collectionsData = []
 	const [error, setError] = useState('');
 	const [deletePopup, setDeletePopup] = useState(false);
-	console.log(user);
+	const [collectionData, setCollectionData] = useState([]);
+	const [deletButtonVisivility, setDeleteButtonVisivility] = useState(true);
 
-	console.log(isAuthenticated);
+	const getCorrectData = (data) => {
+		data.forEach(obj => {
+			collectionsData.push(obj.nombre)
+		});
+		console.log(collectionsData);
+	}
+
 	const deleteProfile = async (id, type) => {
 		try {
-			console.log(user);
 			const response = await fetch('http://localhost:80/readsync/backend/deleteData.php', {
 				method: 'POST',
 				headers: {
@@ -33,6 +42,38 @@ function Profile() {
 		}
 	}
 
+	const fetchURL = "http://localhost:80/readsync/backend/getCollections.php";
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await fetch(fetchURL, {
+					method: 'POST',
+					headers: {
+							'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ user: user })
+				});
+				const json = await response.json();
+				if (json[0].result !== "Falta información de usuario") {
+						setCollectionData(json);
+				} else {
+						setCollectionData([]);
+						setError(json[0].result);
+				}
+			} catch (err) {
+					setError(err.message);
+			} finally {
+					//setLoading(false);
+			}
+		}
+		fetchData();
+	}, [user, fetchURL])
+
+	if(collectionData.length > 0){
+		getCorrectData(collectionData[0].result)
+	}
+
+
 	const handleDeleteProfile = async (user) => {
 		setDeletePopup(false);
 		try {
@@ -40,24 +81,45 @@ function Profile() {
 		} catch (err) {
 				setError(err.message);
 		}
-};
+	};
+
 
 	return(
 		<>
-			<div>
+			<section id="profile-section">
 				{error && <MsgPopup error={error} setError={setError}/>}
-				<p>Hola {user}</p>
-				<p>ALOOOOOOOOOOO</p>
-				{deletePopup ? <div>
-					<p>¿Estas seguro que quieres eliminar tu cuenta?</p>
-					<button onClick={() => handleDeleteProfile()}>Borrar</button>
-					<button onClick={() => setDeletePopup(!deletePopup)}>Cerrar</button>
-				</div> : ''}
+				<h2>{user}</h2>
 
-				<button onClick={() => setDeletePopup(!deletePopup)}>
+				<div className="reading-goal">
+					Reading Goal
+				</div>
+
+				{collectionData.length > 0 && collectionData[0]?.result !== `Ninguna colección de ${user}` ? 
+						(<Carrousel 
+							data={collectionsData} 
+							title={"Colecciones"}
+						/>)
+						
+				 : (<div className="noInfo">No hay colecciones</div>)}
+				
+
+				<div>
+					libros 5 estrellas
+				</div>
+
+				<button className={deletButtonVisivility ? "delete-user-button" : "hide"} onClick={() => {setDeletePopup(!deletePopup); setDeleteButtonVisivility(!deletButtonVisivility)}}>
 					Borrar cuenta
 				</button>
-			</div>
+
+				{deletePopup ? <div className="center">
+					<p>¿Estas seguro que quieres eliminar tu cuenta?</p>
+					<div>
+						<button onClick={() => handleDeleteProfile()}>Borrar</button>
+						<button onClick={() =>{setDeletePopup(!deletePopup); setDeleteButtonVisivility(!deletButtonVisivility)}}>Cerrar</button>
+					</div>
+				</div> : ''}
+
+			</section>
 		</>
 	)
 }

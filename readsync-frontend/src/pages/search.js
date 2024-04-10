@@ -27,6 +27,7 @@ function Search(){
         const response = await fetch(api);
         const json = await response.json();
         setData(json.items || []);
+        console.log(json);
         const totalItems = json.totalItems || 0;
         setTotalPages(Math.ceil(totalItems / RESULTS_PER_PAGE));
       } catch (err) {
@@ -46,7 +47,8 @@ function Search(){
 	return(
 		<>
 
-		<section className="search-container">
+		<section className="search-container center">
+      <div className="search-container-results center">
 			{loading ? 
 				(<Loader />)
 			: (data.length > 0 && data.map((data) => (
@@ -64,6 +66,7 @@ function Search(){
 				
 			))
 			)}
+      </div>
 
 			<div className="pagination">
           <ReactPaginate
@@ -73,6 +76,8 @@ function Search(){
             onPageChange={handlePageChange}
             containerClassName="pagination"
             activeClassName="active"
+            previousLabel="<"
+            nextLabel=">"
           />
         </div>
 

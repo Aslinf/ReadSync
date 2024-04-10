@@ -6,6 +6,12 @@
     color: var(--dark-brown-color);
 }
 
+.delete-library-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .books-section {
     margin-top: 40px;
     display: flex;
@@ -16,14 +22,19 @@
 }
 
 .book-container {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 10px;
     background-color: var(--dark-cream-color);
-    border-radius: 15px;
+    border-radius: 20px;
     border: 1px solid #d3b79e;
     box-shadow: 11px 11px 15px -3px rgba(0,0,0,0.1);
+}
+
+.book-gap {
+    row-gap: 20px;
 }
 
 .book-leidos-container-size {
@@ -48,7 +59,15 @@
     cursor: pointer;
 }
 
-.book-container > Link {
+.book-container > a {
+    text-decoration: none;
+    color: var(--dark-brown-color);
+    cursor: pointer;
+}
+
+.book-info > a {
+    text-decoration: none;
+    color: var(--dark-brown-color);
     cursor: pointer;
 }
 
@@ -61,6 +80,10 @@
     row-gap: 5px;
     padding-left: 10px;
     color: var(--dark-brown-color);
+}
+
+.book-info .react-stars > span {
+    background-color: #eee5da;
 }
 
 .book-info .react-stars > span {

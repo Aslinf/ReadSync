@@ -1,19 +1,31 @@
 import { Loader } from "../pages/home";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-function PrivateRoute({ children }){
-    
+function PrivateRoute({ children }) {
     const { isAuthenticated } = useAuth();
-    //let location = useLocation();
+    const [loading, setLoading] = useState(true);
 
-   
-        if(!isAuthenticated){
-            return <Navigate to="/sesion"/>
-        }
-        return children;
-   
+    useEffect(() => {
+        // Simulate async authentication check
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000); // Adjust the timeout as needed
+    }, [isAuthenticated]);
 
+    if (loading) {
+        // Render loading indicator while checking authentication
+        return <Loader />;
+    }
+
+    if (!isAuthenticated) {
+        // Redirect to login page if not authenticated
+        return <Navigate to="/sesion" />;
+    }
+
+    // Render the protected content if authenticated
+    return children;
 }
 
 export default PrivateRoute;
