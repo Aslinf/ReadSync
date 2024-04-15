@@ -99,11 +99,6 @@ if ($user !== "") {
                 $stmtLinkBook->bind_param("ii", $idCollection, $bookId);
                 $stmtLinkBook->execute();
 
-                if ($stmtLinkBook->affected_rows > 0) {
-                    $result .= "Enlazado a la colección con éxito";
-                } else {
-                    $result .= "Error al enlazar a la colección";
-                }
 
                 $stmtLinkBook->close();
             } else {

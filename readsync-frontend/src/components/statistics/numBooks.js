@@ -4,7 +4,6 @@ import { Bar } from "react-chartjs-2";
 
 
 const NumBooks = ({ numBookData }) => {
-	console.log(numBookData);
 	
 	return(
 		<>

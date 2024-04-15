@@ -11,6 +11,7 @@ function BookCategories({ bookCategories }) {
 
 	const [colors, setColors] = useState([]);
 
+	//generamos colores aleatorios para las estadísticas
 	function randomColor(array){
 		for(let i = 0; i < array.length; i++){
 			colors.push('#'+Math.floor(Math.random()*16777215).toString(16));
@@ -18,6 +19,7 @@ function BookCategories({ bookCategories }) {
 	}
 
 	useEffect(() => {
+		//conseguimos los datos de los gneros
 		const getData = () => {
 			if(Array.isArray(bookCategories[0]?.all_collections) && bookCategories.length > 0){
 				const allDataLabels = [];

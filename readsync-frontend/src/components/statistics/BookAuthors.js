@@ -15,6 +15,7 @@ const BookAuthors = ({ bookAuthorData }) => {
 		}
 	}
 
+	//conseguimos los datos de los autores
 	useEffect(() => {
 		const getData = () => {
 				const dataLabels = [];
@@ -30,7 +31,6 @@ const BookAuthors = ({ bookAuthorData }) => {
 	getData();
 	}, [bookAuthorData]);
 
-	console.log(colors);
 
 	return(
 		<>

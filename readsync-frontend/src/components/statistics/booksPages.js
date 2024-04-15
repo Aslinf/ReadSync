@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 
 const BooksPages = ({ bookPagesData }) => {
 
-    console.log(bookPagesData);
-
     const getBookPagesData = bookPagesData[0][0];
     
     return(

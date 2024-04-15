@@ -19,7 +19,7 @@ function Statistics(){
 	const [bookPagesData, setBookPagesData] = useState([]);
 	const [bookFormatData, setBookFormatData] = useState([]);
 	const [bookAuthorData, setBookAuthorData] = useState([]);
-	const [bookRatings, setBookRatingsData] = useState([]);
+	const [bookRatingsData, setBookRatingsData] = useState([]);
 	const [bookCategories, setBookCategoriesData] = useState([]);
 
 	const getNumBooksEndpoint = "http://localhost:80/readsync/backend/statistics/getNumBooks.php";
@@ -30,6 +30,7 @@ function Statistics(){
 	const getBookCategoriesEndpoint = "http://localhost:80/readsync/backend/statistics/getBookCategories.php";
 
 
+	//conseguimos toda la información necesaria para las estadísticas
 	useEffect(() => {
 		const getData = async () => {
 			try{
@@ -164,11 +165,12 @@ function Statistics(){
 							bookPagesData={bookPagesData}
 						/>
 					}
+					</div>
 
 					<BookRatings 
-						bookRatings={bookRatings}
+						bookRatingsData={bookRatingsData}
 					/>
-				</div>
+				
 
 				<div className='graphics'>
 					{bookFormatData[0].length == 0 ? "" : 

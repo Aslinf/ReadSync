@@ -10,7 +10,7 @@ function ShowCollections({ deleteData }) {
     const [collectionData, setCollectionData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-		const [deleteMode, setDeteleMode] = useState(false);
+	const [deleteMode, setDeteleMode] = useState(false);
     const fetchURL = "http://localhost:80/readsync/backend/getCollections.php";
 
     useEffect(() => {

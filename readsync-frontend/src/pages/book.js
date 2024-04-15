@@ -23,8 +23,7 @@ function Book(){
 	const { bookId } = useParams();
 
 	const APIKey = "AIzaSyBMESbDd7GPd7uKJgr-KFz0A6U5j6CMfA8";
-	const api = `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${APIKey}`
-  //const api = `https://www.googleapis.com/books/v1/volumes?q=intitle:${bookId}&key=${APIKey}`;
+	const api = `https://www.googleapis.com/books/v1/volumes/${bookId}?key=${APIKey}`;
 
 	const [title, setTitle] = useState("");
 	const [subject, setSubject] = useState("");

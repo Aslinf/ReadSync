@@ -106,6 +106,7 @@ function SignUp(){
     }
   }
 
+  //miramos si el usuario ya existe
   function checkUser(){
     
     const url = "http://localhost:80/readsync/backend/checkuser.php";
@@ -138,6 +139,7 @@ function SignUp(){
     });
   }
 
+  //en caso que se haya rellenado mal el formulario
   function handleError(){
     setError("El formulario es incorrecto");
   }

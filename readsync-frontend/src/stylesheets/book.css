@@ -262,7 +262,7 @@
     width: 90%;
     display: flex;
     flex-direction: row;
-    overflow-x: auto; /* Apply overflow only horizontally */
+    overflow-x: auto; 
     white-space: nowrap;
     box-shadow: inset 0px 0px 39px 17px rgba(0,0,0,0.1);
 }
@@ -289,7 +289,6 @@
     background-color: #e4d4c4;
     text-align: center;
     padding: 14px;
-    /* text-decoration: none; */
     cursor: pointer;
 }
 
@@ -298,7 +297,7 @@
 }
 
 .book-categories::-webkit-scrollbar {
-    height: 0px; /* Width of the scrollbar */
+    height: 0px; 
 }
 
 /* TABLETS */

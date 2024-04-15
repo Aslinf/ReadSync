@@ -3,15 +3,19 @@ import { useAuth } from "../components/AuthContext";
 import { useNavigate } from "react-router-dom";
 import MsgPopup from "../components/MsgPopup";
 import "../stylesheets/profile.css";
+import { Loader } from "./home";
+import BookRatings from "../components/statistics/BookRatings";
 import Carrousel from "../components/Carrousel";
 
 function Profile() {
 	const { user, logout, isAuthenticated } = useAuth();
 	const navigate = useNavigate();
 	const collectionsData = []
+	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 	const [deletePopup, setDeletePopup] = useState(false);
 	const [collectionData, setCollectionData] = useState([]);
+	const [bookRatingsData, setBookRatingsData] = useState([]);
 	const [deletButtonVisivility, setDeleteButtonVisivility] = useState(true);
 
 	const getCorrectData = (data) => {
@@ -43,6 +47,7 @@ function Profile() {
 	}
 
 	const fetchURL = "http://localhost:80/readsync/backend/getCollections.php";
+	const getBookRatingsEndpoint = "http://localhost:80/readsync/backend/statistics/getBookRating.php";
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -60,10 +65,26 @@ function Profile() {
 						setCollectionData([]);
 						setError(json[0].result);
 				}
+
+				const response2 = await fetch(getBookRatingsEndpoint, {
+					method: 'POST',
+					mode: "cors",
+          headers: {
+						"Accept": "application/json",
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user: user })
+				});
+				if (!response2.ok) {
+					throw new Error('Failed to fetch ratings from backend');
+				}
+				const bookRatings = await response2.json();
+				setBookRatingsData(bookRatings);
+
 			} catch (err) {
 					setError(err.message);
 			} finally {
-					//setLoading(false);
+					setLoading(false);
 			}
 		}
 		fetchData();
@@ -86,7 +107,8 @@ function Profile() {
 
 	return(
 		<>
-			<section id="profile-section">
+		{loading ? (<Loader />)
+			:<section id="profile-section">
 				{error && <MsgPopup error={error} setError={setError}/>}
 				<h2>{user}</h2>
 
@@ -103,9 +125,7 @@ function Profile() {
 				 : (<div className="noInfo">No hay colecciones</div>)}
 				
 
-				<div>
-					libros 5 estrellas
-				</div>
+				<BookRatings bookRatingsData={bookRatingsData}/>
 
 				<button className={deletButtonVisivility ? "delete-user-button" : "hide"} onClick={() => {setDeletePopup(!deletePopup); setDeleteButtonVisivility(!deletButtonVisivility)}}>
 					Borrar cuenta
@@ -119,7 +139,7 @@ function Profile() {
 					</div>
 				</div> : ''}
 
-			</section>
+			</section>}
 		</>
 	)
 }

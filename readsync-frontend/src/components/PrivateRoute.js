@@ -8,23 +8,20 @@ function PrivateRoute({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Simulate async authentication check
         setTimeout(() => {
             setLoading(false);
-        }, 1000); // Adjust the timeout as needed
+        }, 1000); 
     }, [isAuthenticated]);
 
     if (loading) {
-        // Render loading indicator while checking authentication
         return <Loader />;
     }
 
     if (!isAuthenticated) {
-        // Redirect to login page if not authenticated
+        // Enviamos al login si no ha iniciado sesión
         return <Navigate to="/sesion" />;
     }
 
-    // Render the protected content if authenticated
     return children;
 }
 

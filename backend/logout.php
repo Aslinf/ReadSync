@@ -1,5 +1,5 @@
 <?php
-// Handle preflight requests
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
@@ -8,7 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Handle  POST request (logout logic)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     session_start();
     session_unset();

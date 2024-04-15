@@ -16,20 +16,20 @@ function Carrousel({ data, title }){
 
     return(
         <>
-					<div className="book-subjects">
-						<span><b>{title}</b> </span>
-						<div className="book-subjects-content">
-							<button className="book-categories-button" onClick={() => handleNavCategories('left')}>{`<`}</button>
-							<ul ref={navRef} className="book-categories">
+			<div className="book-subjects">
+				<span><b>{title}</b> </span>
+				<div className="book-subjects-content">
+					<button className="book-categories-button" onClick={() => handleNavCategories('left')}>{`<`}</button>
+					<ul ref={navRef} className="book-categories">
 
-								{data.map((category, index) => (
-										<li key={index} className="book-category">{category}</li>
-								))}
-								
-							</ul>
-							<button className="book-categories-button" onClick={() => handleNavCategories('right')}>{`>`}</button>
-						</div>
-					</div>
+						{data.map((category, index) => (
+								<li key={index} className="book-category">{category}</li>
+						))}
+						
+					</ul>
+					<button className="book-categories-button" onClick={() => handleNavCategories('right')}>{`>`}</button>
+				</div>
+			</div>
         </>
     )
 }

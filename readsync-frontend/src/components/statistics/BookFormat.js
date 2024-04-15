@@ -6,6 +6,7 @@ const BooksFormats = ({ bookFormatData }) => {
 	const [formatsData, setFormatsData] = useState([]);
 
 	useEffect(() => {
+		//conseguimos los datos de los formatos leídos
 		const data = [0, 0, 0];
 		const getData = () => {
 			bookFormatData[0].forEach(([format, number]) => {
