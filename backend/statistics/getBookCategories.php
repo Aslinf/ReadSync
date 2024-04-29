@@ -12,16 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-$eData = file_get_contents("php://input");
-$dData = json_decode($eData, true);
-
-if ($dData === null) {
-    $response[] = array("result" => "Error decoding JSON data");
+$user = $_GET['user'];
+if ($user === "") {
+    $response[] = array("result" => "Falta información de usuario");
     echo json_encode($response);
     exit();
 }
-
-$user = $dData['user'];
 
 $resultAll = [];
 $resultLeidos = [];

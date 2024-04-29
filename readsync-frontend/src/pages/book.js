@@ -15,7 +15,6 @@ function Book(){
 	const navigate = useNavigate();
 
 	const [popup, setPopup] = useState(false);
-	//const [popupMsg, setPopupMsg] = useState(false);
 	const [collectionForm, setCollectionForm] = useState(false);
 	const [showMore, setShowMore] = useState(false);
 	const [form, setForm] = useState(false);
@@ -35,12 +34,13 @@ function Book(){
 	const [format, setFormat] = useState("");
 	const [cover, setCover] = useState("");
 	const [categories, setCategories] = useState([]);
+	const [date, setDate] = useState("");
 	const [collectionName, setCollectionName] = useState("");
 
 	const [collectionData, setCollectionData] = useState("");
 	// Conseguimos la información del libro
 	useEffect(() => {
-    const getData = async () => {
+    const getBookData = async () => {
       try{
         const response = await fetch(api);
         const json = await response.json();
@@ -61,7 +61,7 @@ function Book(){
 				setLoading(false);
 			}
     }
-    getData();
+    getBookData();
 
   }, [api]);
 
@@ -110,6 +110,9 @@ function Book(){
 				setError("");
         setRating(e);
         break;
+			case "formDate":
+				setError("");
+				setDate(e.target.value);
 				
 			default:
 				break;
@@ -137,7 +140,8 @@ function Book(){
 				format: format,
 				cover: cover,
 				collectionName: collectionName,
-				collectionID: collectionID
+				collectionID: collectionID,
+				date: date
       }
 
 			//dependiento del la colección a la que se añade se escoge el endpoint
@@ -163,6 +167,8 @@ function Book(){
       })
       .then((res) => {
         setError(res[0].result);
+				setCollectionForm(false);
+				setPopup(false);
       }).catch((err) =>{
         setError(err.message);
       });

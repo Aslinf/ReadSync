@@ -19,7 +19,7 @@ $id = $dData['id'];
 $type = $dData['type'];
 
 if ($dData === null || !isset($dData['id']) || !isset($dData['type'])) {
-    $response = array("result" => "Error: Invalid request");
+    $response = array("result" => "Falta información");
     http_response_code(400);
     echo json_encode($response);
     exit();
@@ -142,23 +142,6 @@ if ($type === 'book') {
         http_response_code(500);
     }
 
-
-    /*
-    $sql5 = "SET @id_usuario := (SELECT id_usuario FROM USUARIOS WHERE usuario = ?);
-    WITH 
-    LibrosAfectados AS 
-    ( SELECT id_libro FROM LIBROS WHERE id_usuario = @id_usuario) 
-    , 
-    ColeccionesAfectadas AS 
-    (SELECT DISTINCT COLECCIONES_id_coleccion FROM COLECCIONES_has_LIBROS WHERE LIBROS_id_libro IN (SELECT id_libro FROM LibrosAfectados))
-    
-    DELETE FROM COLECCIONES WHERE id_coleccion IN (SELECT DISTINCT COLECCIONES_id_coleccion FROM ColeccionesAfectadas);
-    DELETE FROM COLECCIONES_has_LIBROS WHERE COLECCIONES_id_coleccion IN (SELECT DISTINCT COLECCIONES_id_coleccion FROM ColeccionesAfectadas);
-    DELETE FROM LIBROS WHERE id_libro IN (SELECT id_libro FROM LibrosAfectados);
-    DELETE  FROM USUARIOS WHERE id_usuario = @id_usuario";
-    $stmt5 = $conn->prepare($sql5);
-    $stmt5->bind_param("s", $id); 
-    $stmt5->execute();*/
 
     if ($stmt5->affected_rows > 0) {
         $response = array("result" => "Perfil eliminado con éxito");

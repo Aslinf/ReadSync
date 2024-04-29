@@ -5,7 +5,6 @@ import "../stylesheets/book.css";
 const ReadForm = ({ setForm, setPopup, handleInputChange, handleAddCollection, data }) => {
     
   const ratingChanged = (newRating) => {
-    console.log(newRating)
     handleInputChange(newRating, "formRating");
   };
   
@@ -29,9 +28,19 @@ const ReadForm = ({ setForm, setPopup, handleInputChange, handleAddCollection, d
 
               onChange={ratingChanged}
             />
+
+            <div>
+              <label>Fecha Leído</label>
+              <input 
+                type="date" 
+                onChange={(e)=> handleInputChange(e, "formDate")}
+              />
+            </div>
             
             <div className="add-leidos-form-content">
               <div className="form-content-format">
+                
+
                 <div className="format-form-option">
               
                   <input 

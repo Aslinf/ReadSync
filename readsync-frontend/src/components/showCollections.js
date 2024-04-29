@@ -14,30 +14,33 @@ function ShowCollections({ deleteData }) {
     const fetchURL = "http://localhost:80/readsync/backend/getCollections.php";
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(fetchURL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ user: user })
-                });
-                const json = await response.json();
-                if (json[0].result !== "Falta información de usuario") {
-                    setCollectionData(json);
-                } else {
-                    setCollectionData([]);
-                    setError(json[0].result);
-                }
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
+        const getCollections = async () => {
+          try {
+						const url = new URL(fetchURL);
+						url.searchParams.append('user', user);
+
+						const response = await fetch(url, {
+							method: 'GET',
+							headers: {
+								'Content-Type': 'application/json'
+							}
+						});
+						const json = await response.json();
+						if (json[0].result !== "Falta información de usuario") {
+							setCollectionData(json);
+						} else {
+							setCollectionData([]);
+							setError(json[0].result);
+						}
+					} catch (err) {
+							setError(err.message);
+					} finally {
+							setLoading(false);
+					}
         }
-        fetchData();
+        getCollections();
     }, [user, fetchURL])
+
 
     const handleDeleteCollection = async (id) => {
         try {
@@ -68,7 +71,7 @@ function ShowCollections({ deleteData }) {
 																		<div className={deleteMode ? "delete-true center" : "delete-false" }>
 																			<p onClick={() => handleDeleteCollection(data.id_coleccion)}>X</p>
 																		</div>
-																		<Link to={`/biblioteca/${data.nombre}`} >
+																		<Link to={`/biblioteca/${data.nombre}`} state={{collectionID : data.id_coleccion}}>
 																				<p className="collection-name">{data.nombre}</p>
 																		</Link>
 																	</div>

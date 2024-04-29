@@ -1,0 +1,33 @@
+.reading_goal_container {
+    width: 100%;
+}
+
+.reading_goal_container > button {
+    border: none;
+    background-color: var(--light-cream-color);
+    color: rgb(144, 142, 142);
+    margin: 5px;
+    cursor: pointer;
+}
+
+.progress_bar_container {
+    width: 80%;
+    margin: 15px;
+}
+
+.reading-goal-input {
+    border: none;
+    margin-bottom: 10px;
+    box-shadow: inset 0px 1px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    padding-left: 15px;
+    height: 2rem;
+}
+
+.reading-goal-submit {
+    border: none;
+    background-color: var(--dark-brown-color);
+    color: var(--light-cream-color);
+    padding: 10px;
+    border-radius: 1rem;
+}

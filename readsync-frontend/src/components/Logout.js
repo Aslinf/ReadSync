@@ -25,7 +25,7 @@ function Logout() {
     })
     .then((res) => {
       logout(); 
-      navigate('/sesion'); 
+      navigate('/'); 
     })
     .catch((err) => {
       console.error(err);

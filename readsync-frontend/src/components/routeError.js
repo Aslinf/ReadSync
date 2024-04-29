@@ -3,7 +3,7 @@
 function NoMatch() {
 	return (
 		<div>
-			<p style={{textAlign: "center", fontWeight: "500"}}>Página no existe</p>
+			<p style={{textAlign: "center", fontWeight: "500", paddingTop: "100px", fontSize: "1.2rem"}}>Página no existe</p>
 		</div>
 	)
 }

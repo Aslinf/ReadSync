@@ -22,23 +22,23 @@ if ($dData === null) {
 }
 
 $user = $dData['user'];
-$collectionName = $dData['collectionName']; 
+$collectionID = $dData['collectionID']; 
 
 $result = "";
 
-if ($user !== "" && $collectionName !== "") {
+if ($user !== "" && $collectionID !== "") {
 
     $sql = "SELECT L.id_libro, L.nombre, L.ID, L.comentario, L.calificacion, L.formato, L.portada
     FROM LIBROS L
     INNER JOIN COLECCIONES_has_LIBROS CL ON L.id_libro = CL.LIBROS_id_libro
     INNER JOIN COLECCIONES C ON CL.COLECCIONES_id_coleccion = C.id_coleccion
     WHERE L.id_usuario = (SELECT id_usuario FROM USUARIOS WHERE usuario = ?)
-    AND C.nombre = ?
+    AND C.id_coleccion = ?
     AND L.id_libro IN (SELECT LIBROS_id_libro FROM COLECCIONES_has_LIBROS WHERE COLECCIONES_id_coleccion = C.id_coleccion)
     ORDER BY L.nombre";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $user, $collectionName);
+    $stmt->bind_param("ss", $user, $collectionID);
     $stmt->execute();
     $stmt->store_result();
 

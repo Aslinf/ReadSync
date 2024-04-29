@@ -31,6 +31,7 @@ $comment = $dData['comment'];
 $rating = $dData['rating']; 
 $format = $dData['format']; 
 $portada = $dData['cover'];
+$date = $dData['date'];
 
 $result = "";
 
@@ -67,10 +68,11 @@ if ($user !== "") {
                                                 comentario = COALESCE(NULLIF(?, ''), comentario), 
                                                 calificacion = COALESCE(NULLIF(?, ''), calificacion), 
                                                 formato = COALESCE(NULLIF(?, ''), formato), 
-                                                portada = COALESCE(NULLIF(?, ''), portada) 
+                                                portada = COALESCE(NULLIF(?, ''), portada),
+                                                fecha_leido = COALESCE(NULLIF(?, ''), fecha_leido) 
                               WHERE id_libro = ?";
             $stmtUpdateBook = $conn->prepare($sqlUpdateBook);
-            $stmtUpdateBook->bind_param("ssssssssi", $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $bookId);
+            $stmtUpdateBook->bind_param("sssisssssi", $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $date, $bookId);
             $stmtUpdateBook->execute();
 
             if ($stmtUpdateBook->affected_rows > 0) {
@@ -81,31 +83,79 @@ if ($user !== "") {
 
             $stmtUpdateBook->close();
         } else {
-            // El libro no está en la colección "Leídos", lo añadimos
-            $sqlInsertBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
-            $stmtInsertBook = $conn->prepare($sqlInsertBook);
-            $stmtInsertBook->bind_param("ssssssdsss", $bookName, $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
-            $stmtInsertBook->execute();
+            // El libro no está en la colección "Leídos"
+    
+            // Miramos si el libro existe en alguna otra colección del usuario 
+            $sqlCheckBookExists = "SELECT id_libro FROM LIBROS WHERE ID = ? AND id_usuario = (SELECT id_usuario FROM USUARIOS WHERE usuario = ?)";
+            $stmtCheckBookExists = $conn->prepare($sqlCheckBookExists);
+            $stmtCheckBookExists->bind_param("ss", $ID, $user);
+            $stmtCheckBookExists->execute();
+            $stmtCheckBookExists->store_result();
 
-            if ($stmtInsertBook->affected_rows > 0) {
-                $result = "Libro añadido con éxito. ";
+            if ($stmtCheckBookExists->num_rows > 0) {
+                // el libro ya existe en la biblioteca del usuario
 
-                // Conseguimos el ID del libro
-                $bookId = $stmtInsertBook->insert_id;
+                // conseguimos id del libro
+                $stmtCheckBookExists->bind_result($bookId);
+                $stmtCheckBookExists->fetch();
+                $stmtCheckBookExists->close();
 
-                // Enlazamos el libro a la colección "Leídos"
-                $sqlLinkBook = "INSERT INTO COLECCIONES_has_LIBROS (COLECCIONES_id_coleccion, LIBROS_id_libro) VALUES (?, ?)";
-                $stmtLinkBook = $conn->prepare($sqlLinkBook);
-                $stmtLinkBook->bind_param("ii", $idCollection, $bookId);
-                $stmtLinkBook->execute();
+                //actualizamos la infromación del libro
+                $sqlUpdateBook = "UPDATE LIBROS SET genero = COALESCE(NULLIF(?, ''), genero), 
+                                                    autor = COALESCE(NULLIF(?, ''), autor), 
+                                                    paginas = COALESCE(NULLIF(?, ''), paginas), 
+                                                    comentario = COALESCE(NULLIF(?, ''), comentario), 
+                                                    calificacion = COALESCE(NULLIF(?, ''), calificacion), 
+                                                    formato = COALESCE(NULLIF(?, ''), formato), 
+                                                    portada = COALESCE(NULLIF(?, ''), portada),
+                                                    fecha_leido = COALESCE(NULLIF(?, ''), fecha_leido) 
+                                WHERE id_libro = ?";
+                $stmtUpdateBook = $conn->prepare($sqlUpdateBook);
+                $stmtUpdateBook->bind_param("ssisssssi", $categories, $author, $pages, $comment, $rating, $format, $portada, $date, $bookId);
+                $stmtUpdateBook->execute();
 
+                if ($stmtUpdateBook->affected_rows > 0) {
+                    $result = "Información actualizada. ";
 
-                $stmtLinkBook->close();
+                    // añadimos el libro a la colección de leídos
+                    $sqlLinkBook = "INSERT INTO COLECCIONES_has_LIBROS (COLECCIONES_id_coleccion, LIBROS_id_libro) VALUES (?, ?)";
+                    $stmtLinkBook = $conn->prepare($sqlLinkBook);
+                    $stmtLinkBook->bind_param("ii", $idCollection, $bookId);
+                    $stmtLinkBook->execute();
+                    $stmtLinkBook->close();
+
+                } else {
+                    $result = "Error actualizando la información. ";
+                }
+
+                $stmtUpdateBook->close();
             } else {
-                $result = "Error añadiendo el libro. ";
-            }
+                // El libro no existe en la biblioteca del usuario, así que lo añadimos
 
-            $stmtInsertBook->close();
+                $sqlInsertBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, fecha_leido, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
+                $stmtInsertBook = $conn->prepare($sqlInsertBook);
+                $stmtInsertBook->bind_param("ssssisdssss", $bookName, $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $date, $user);
+                $stmtInsertBook->execute();
+
+                if ($stmtInsertBook->affected_rows > 0) {
+                    $result = "Libro añadido con éxito. ";
+
+                    // Get the ID of the newly inserted book
+                    $bookId = $stmtInsertBook->insert_id;
+
+                    // Link the book to the "Leídos" collection
+                    $sqlLinkBook = "INSERT INTO COLECCIONES_has_LIBROS (COLECCIONES_id_coleccion, LIBROS_id_libro) VALUES (?, ?)";
+                    $stmtLinkBook = $conn->prepare($sqlLinkBook);
+                    $stmtLinkBook->bind_param("ii", $idCollection, $bookId);
+                    $stmtLinkBook->execute();
+
+                    $stmtLinkBook->close();
+                } else {
+                    $result = "Error añadiendo el libro. ";
+                }
+
+                $stmtInsertBook->close();
+            }
         }
 
     } else {
@@ -115,9 +165,9 @@ if ($user !== "") {
             $idCollection = $conn->insert_id;
 
             // Ahora añadimos el libro a la colección "Leídos"
-            $sqlInsertBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
+            $sqlInsertBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, fecha_leido, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
             $stmtInsertBook = $conn->prepare($sqlInsertBook);
-            $stmtInsertBook->bind_param("ssssssdsss", $bookName, $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
+            $stmtInsertBook->bind_param("sssssidssss", $bookName, $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $date, $user);
             $stmtInsertBook->execute();
 
             if ($stmtInsertBook->affected_rows > 0) {

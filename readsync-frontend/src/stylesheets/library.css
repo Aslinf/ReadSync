@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     background-color: var(--light-cream-color);
+    padding-bottom: 100px;
 }
 
 .library-collections {
@@ -57,6 +58,7 @@
     color: var(--dark-brown-color);
     box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
     border: 1px solid #d3b79e;
+    transition: all 0.5s ease-out;
 }
 
 .delete-true {
@@ -82,9 +84,7 @@
 }
 
 .collection-container:hover {
-    height: 210px;
-    width: 160px;
-    transition: all 0.5s ease-out;
+    transform: scale(1.08);
 }
 
 .collection-name {

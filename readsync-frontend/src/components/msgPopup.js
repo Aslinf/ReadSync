@@ -5,7 +5,7 @@ function MsgPopup({ error, setError }){
 	error && (
 		setTimeout(() => {
 			setError(null); 
-		}, 2000)
+		}, 3000)
 	)
 
 	return(

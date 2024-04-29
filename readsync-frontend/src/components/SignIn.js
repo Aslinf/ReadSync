@@ -1,40 +1,15 @@
 import '../stylesheets/sign-in.css';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
 
-function SignIn(){
+function SignIn({ handleInputChange, user, password, error, setError }){
 
-  const [user, setUser] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [msg, setMsg] = useState("");
-  //const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
-  const { signin, token } = useAuth();
+  const { signin } = useAuth();
 
-
-  const handleInputChange = (e, type) => {
-    switch(type){
-      case "user":
-        setError("");
-        setUser(e.target.value);
-        if(e.target.value === ""){
-          setError("¡El campo usuario no puede estar vacío!")
-        }
-        break;
-
-      case "password":
-        setError("");
-        setPassword(e.target.value);
-        if(e.target.value === ""){
-          setError("¡El campo contraseña no puede estar vacío!")
-        }
-        break;
-
-      }
-    }
 
   function handleSignin() {
     if (user !== "" && password !== "") {
@@ -85,6 +60,12 @@ function SignIn(){
     }
   }
 
+  //iniciar sesión en enter
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSignin();
+    }
+  }
 
   
   return(
@@ -100,6 +81,7 @@ function SignIn(){
     name="usuario"
     value={user}
     onChange={(e)=> handleInputChange(e, "user")}
+    onKeyDown={handleKeyDown}
     />
     </label>
 
@@ -109,6 +91,7 @@ function SignIn(){
     name="password"
     value={password}
     onChange={(e)=> handleInputChange(e, "password")}
+    onKeyDown={handleKeyDown}
     />
     </label>
 
@@ -119,6 +102,7 @@ function SignIn(){
     onClick={handleSignin}
     />
 
+    <p>Si aún no tienes cuenta <Link to="/sesion/registro" className='signin-up-buttons'>Registrate</Link></p>
     
     </>
   )

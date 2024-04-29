@@ -20,7 +20,7 @@ function Search(){
 
 	useEffect(() => {
     //conseguimos los resultados de búsqueda
-    const fetchData = async () => {
+    const fetchBooksData = async () => {
       try {
         const startIndex = currentPage * RESULTS_PER_PAGE;
         const api = `https://www.googleapis.com/books/v1/volumes?q=intitle:${book}&key=${APIKey}&startIndex=${startIndex}&maxResults=${RESULTS_PER_PAGE}`;
@@ -37,7 +37,7 @@ function Search(){
       }
     };
 
-    fetchData();
+    fetchBooksData();
   }, [book, currentPage, APIKey]);
 
   const handlePageChange = ({ selected }) => {

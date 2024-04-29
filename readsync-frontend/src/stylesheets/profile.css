@@ -23,3 +23,23 @@
 .hide {
     visibility: hidden;
 }
+
+.delete-button {
+    padding: 5px 10px;
+    color: var(--light-brown-color);
+    background-color: var(--dark-cream-color);
+    border: 1px solid var(--light-brown-color);
+    border-radius: 10%;
+    cursor: pointer;
+    transition: ease-out 0.1s;
+}
+
+.close-delete-button {
+    color: var(--light-cream-color);
+    border: 1px solid var(--light-cream-color);
+    background-color: var(--light-brown-color);
+}
+
+.delete-button:hover {
+    transform: scale(1.05);
+}

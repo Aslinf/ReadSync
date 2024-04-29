@@ -22,7 +22,7 @@ function App() {
         <Route path='/estadisticas' element={<PrivateRoute> <Statistics /> </PrivateRoute>} />
         <Route path="*" element={<NoMatch />} />
       </Route>   
-      <Route path='/sesion' element={<SigninUp />} />
+      <Route path='/sesion/:id' element={<SigninUp />} />
     </Routes>
   );
 }

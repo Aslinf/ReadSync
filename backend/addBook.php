@@ -38,34 +38,64 @@ $result = "";
 
 if ($user !== "" && $idCollection !== "") {
 
-    // Añadimos el libro 
-    $sqlBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, id_usuario) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
-    $stmtBook = $conn->prepare($sqlBook);
-    $stmtBook->bind_param("ssssssdsss", $bookName, $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
-    $stmtBook->execute();
+   // Primero miramos si el libro existe ya en la biblioteca del usuario
+    $sqlCheckBookExists = "SELECT id_libro FROM LIBROS WHERE ID = ? AND id_usuario = (SELECT id_usuario FROM USUARIOS WHERE usuario = ?)";
+    $stmtCheckBookExists = $conn->prepare($sqlCheckBookExists);
+    $stmtCheckBookExists->bind_param("ss", $ID, $user);
+    $stmtCheckBookExists->execute();
+    $stmtCheckBookExists->store_result();
 
-    if ($stmtBook->affected_rows > 0) {
-        $result = "Libro añadido con éxito. ";
+    if ($stmtCheckBookExists->num_rows > 0) {
 
-        // Conseguimos el ID del libro
-        $bookId = $stmtBook->insert_id;
+        // Si el libro ya está en la biblioteca, conseguimos su ID
+        $stmtCheckBookExists->bind_result($bookId);
+        $stmtCheckBookExists->fetch();
+        $stmtCheckBookExists->close();
 
-        // Juntamos el libro con la colección en la base de datos
+        // Y añadimos el libro a la colección seleccionada
         $sqlLink = "INSERT INTO COLECCIONES_has_LIBROS (COLECCIONES_id_coleccion, LIBROS_id_libro) 
                     VALUES (?, ?)";
         $stmtLink = $conn->prepare($sqlLink);
         $stmtLink->bind_param("ii", $idCollection, $bookId);
         $stmtLink->execute();
 
+        if($stmtLink->affected_rows > 0){
+            $result = "Libro añadido con éxito. ";
+        } else { 
+            $result ="Error añadiendo el libro. "; 
+        }
+
         $stmtLink->close();
-
+        
     } else {
-        $result = "Error añadiendo el libro. ";
+
+        // El libro no existe en la biblioteca del usuario así que lo añadimos
+        $sqlBook = "INSERT INTO LIBROS (nombre, genero, ID, autor, paginas, comentario, calificacion, formato, portada, id_usuario) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT id_usuario FROM USUARIOS WHERE usuario = ?))";
+        $stmtBook = $conn->prepare($sqlBook);
+        $stmtBook->bind_param("ssssisdsss", $bookName, $categories, $ID, $author, $pages, $comment, $rating, $format, $portada, $user);
+        $stmtBook->execute();
+
+        if ($stmtBook->affected_rows > 0) {
+            $result = "Libro añadido con éxito. ";
+
+            // Conseguimos el ID del libro añadido
+            $bookId = $stmtBook->insert_id;
+
+            // Añadimos el libro a la colección seleccionada
+            $sqlLink = "INSERT INTO COLECCIONES_has_LIBROS (COLECCIONES_id_coleccion, LIBROS_id_libro) 
+                        VALUES (?, ?)";
+            $stmtLink = $conn->prepare($sqlLink);
+            $stmtLink->bind_param("ii", $idCollection, $bookId);
+            $stmtLink->execute();
+
+            $stmtLink->close();
+        } else {
+            $result = "Error añadiendo el libro. ";
+        }
+
+        $stmtBook->close();
     }
-
-    $stmtBook->close();
-
 } else {
     $result = "Falta información de usuario. ";
 }
@@ -75,5 +105,6 @@ $response[] = array("result" => $result);
 echo json_encode($response);
 
 ?>
+
 
 

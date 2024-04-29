@@ -1,13 +1,9 @@
 import '../stylesheets/sign-up.css';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-function SignUp(){
+function SignUp({ handleInputChange, user, email, password, password2, error, setError }){
 
-  const [user, setUser] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
-  const [error, setError] = useState("");
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
@@ -15,45 +11,6 @@ function SignUp(){
       setMsg("");
     }, 15000);
   }, [msg]);
-
-  //mirar si los campos estan vacios y si la contraseña en correcta
-  const handleInputChange = (e, type) => {
-    switch(type){
-      case "user":
-        setError("");
-        setUser(e.target.value);
-        if(e.target.value === ""){
-          setError("¡El campo usuario no puede estar vacío!")
-        }
-        break;
-
-      case "email":
-        setError("");
-        setEmail(e.target.value);
-        if(e.target.value === ""){
-          setError("¡El campo email no puede estar vacío!")
-        }
-        break;
-
-      case "password":
-        setError("");
-        setPassword(e.target.value);
-        if(e.target.value === ""){
-          setError("¡El campo contraseña no puede estar vacío!")
-        }
-        break;
-
-      case "password2":
-          setError("");
-          setPassword2(e.target.value);
-          if(e.target.value === ""){
-            setError("¡Se debe repetir la contraseña!")
-          } else if(e.target.value !== password){
-            setError("¡Las contraseñas no son iguales!")
-          } 
-          break;
-    }
-  }
 
   //comporbamos que la contraseña...
   function checkPassword(){
@@ -63,7 +20,7 @@ function SignUp(){
   }
 
   //enviamos los datos al backend
-  function handleSubmit(){
+  function handleSubmitUser(){
     if(user !== "" && email !== "" && password !== "" && password2 !== ""){
       const url = "http://localhost:80/readsync/backend/signup.php";
       var headers = {
@@ -95,11 +52,11 @@ function SignUp(){
         setError(err.message);
         console.error(err);
       });
-
+/*
       setUser("");
       setEmail("");
       setPassword("");
-      setPassword2("");
+      setPassword2("");*/
 
     }else {
       setError("¡Se deben rellenar todos los campos!");
@@ -115,15 +72,13 @@ function SignUp(){
       "Content-Type": "application/json"
     };
 
-    var Data = {
-      user: user,
-    }
+    const urlCheckUser = new URL(url);
+		urlCheckUser.searchParams.append('user', user);
 
-    fetch(url, {
+    fetch(urlCheckUser, {
       method: "POST",
       mode: "cors",
-      headers: headers,
-      body: JSON.stringify(Data)
+      headers: headers
     })
     .then((res) => {
       if (!res.ok) {
@@ -143,6 +98,7 @@ function SignUp(){
   function handleError(){
     setError("El formulario es incorrecto");
   }
+
 
   return(
     <>
@@ -192,8 +148,10 @@ function SignUp(){
         type="submit"
         defaultValue="submit"
         className='button'
-        onClick={error !== "" ? handleError : handleSubmit}
+        onClick={error !== "" ? handleError : handleSubmitUser}
         />
+
+      <p>Si ya tienes una cuenta <Link to="/sesion/iniciar" className='signin-up-buttons'>Inicia sesión</Link></p>
       
     </>
   );

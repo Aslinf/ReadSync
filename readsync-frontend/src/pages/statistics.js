@@ -32,102 +32,108 @@ function Statistics(){
 
 	//conseguimos toda la información necesaria para las estadísticas
 	useEffect(() => {
-		const getData = async () => {
+		const getStatistics = async () => {
 			try{
 				//conseguimos los datos del número de libros leídos
-				const response = await fetch(getNumBooksEndpoint, {
-					method: 'POST',
+				const urlgetNumBooks = new URL(getNumBooksEndpoint);
+				urlgetNumBooks.searchParams.append('user', user);
+				const response = await fetch(urlgetNumBooks, {
+					method: 'GET',
 					mode: "cors",
           headers: {
 						"Accept": "application/json",
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ user: user })
+          }
 				});
 				if (!response.ok) {
-					throw new Error('Failed to fetch number of books from backend');
+					throw new Error('Error al conseguir el número de libros leídos');
 				}
 				const numBooks = await response.json();
         setNumBookData(numBooks);
 
 
 				//conseguimos los datos del número de páginas leídas
-				const response2 = await fetch(getBookPagesEndpoint, {
-					method: 'POST',
+				const urlgetBookPages = new URL(getBookPagesEndpoint);
+				urlgetBookPages.searchParams.append('user', user);
+				const response2 = await fetch(urlgetBookPages, {
+					method: 'GET',
 					mode: "cors",
           headers: {
 						"Accept": "application/json",
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ user: user })
+          }
 				});
 				if (!response2.ok) {
-					throw new Error('Failed to fetch number of pages from backend');
+					throw new Error('Error al conseguir el númeor de páginas leídas');
 				}
 				const bookPages = await response2.json();
         setBookPagesData(bookPages);
 
 
 				//conseguimos los datos del número de formatos leídos
-				const response3 = await fetch(getBookFormatEndpoint, {
-					method: 'POST',
+				const urlgetBookFormat = new URL(getBookFormatEndpoint);
+				urlgetBookFormat.searchParams.append('user', user);
+				const response3 = await fetch(urlgetBookFormat, {
+					method: 'GET',
 					mode: "cors",
           headers: {
 						"Accept": "application/json",
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ user: user })
+          }
 				});
 				if (!response3.ok) {
-					throw new Error('Failed to fetch formats from backend');
+					throw new Error('Error al conseguir los formatos leídos');
 				}
 				const bookFormat = await response3.json();
         setBookFormatData(bookFormat);
 
 
 				//conseguimos los datos del número de formatos leídos
-				const response4 = await fetch(getBookAuthorsEndpoint, {
-					method: 'POST',
+				const urlgetBookAuthors = new URL(getBookAuthorsEndpoint);
+				urlgetBookAuthors.searchParams.append('user', user);
+				const response4 = await fetch(urlgetBookAuthors, {
+					method: 'GET',
 					mode: "cors",
           headers: {
 						"Accept": "application/json",
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ user: user })
+          }
 				});
 				if (!response4.ok) {
-					throw new Error('Failed to fetch authors from backend');
+					throw new Error('Error al conseguir los autores leídos');
 				}
 				const bookAuthors = await response4.json();
 				setBookAuthorData(bookAuthors);
 
 
 				//conseguimos las calificaciones más altas del usuario
-				const response5 = await fetch(getBookRatingsEndpoint, {
-					method: 'POST',
+				const urlGetBookRating = new URL(getBookRatingsEndpoint);
+				urlGetBookRating.searchParams.append('user', user);
+				const response5 = await fetch(urlGetBookRating, {
+					method: 'GET',
 					mode: "cors",
           headers: {
 						"Accept": "application/json",
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ user: user })
+          }
 				});
 				if (!response5.ok) {
-					throw new Error('Failed to fetch ratings from backend');
+					throw new Error('Error al conseguir los libros favoritos');
 				}
 				const bookRatings = await response5.json();
 				setBookRatingsData(bookRatings);
 
 
 				//conseguimos los generos de la biblioteca del usuario
-				const response6 = await fetch(getBookCategoriesEndpoint, {
-					method: 'POST',
+				const urlgetBookCategoriesEndpoint = new URL(getBookCategoriesEndpoint);
+				urlgetBookCategoriesEndpoint.searchParams.append('user', user);
+				const response6 = await fetch(urlgetBookCategoriesEndpoint, {
+					method: 'GET',
 					mode: "cors",
           headers: {
 						"Accept": "application/json",
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ user: user })
+          }
 				});
 				if (!response6.ok) {
 					throw new Error('Failed to fetch categories from backend');
@@ -142,7 +148,7 @@ function Statistics(){
 				setLoading(false);
 			}
 		}
-		getData();
+		getStatistics();
 	}, [user, getNumBooksEndpoint, getBookPagesEndpoint]);
 	
 

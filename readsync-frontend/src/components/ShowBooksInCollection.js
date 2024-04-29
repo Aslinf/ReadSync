@@ -5,21 +5,25 @@ import { Loader } from "../pages/home";
 import MsgPopup from "./MsgPopup";
 import ReactStars from "react-rating-stars-component";
 import "../stylesheets/collection-books.css";
+import deleteData from "../pages/library";
+
+import { useLocation } from 'react-router-dom';
 
 function CollectionBooks() {
 
+  const location = useLocation();
+  const { collectionID } = location.state;
   const { collection } = useParams();
   const { user } = useAuth();
   const [bookData, setBookData] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteMode, setDeteleMode] = useState(false);
   const fetchURL = "http://localhost:80/readsync/backend/getUserBooks.php"; 
   
     useEffect(() => {
       if (user) { 
-          const fetchData = async () => {
+          const fetchUserBooks = async () => {
               try {
                   const response = await fetch(fetchURL, {
                       method: 'POST',
@@ -28,7 +32,7 @@ function CollectionBooks() {
                       },
                       body: JSON.stringify({ 
                           user: user,
-                          collectionName: collection
+                          collectionID: collectionID
                       })
                   });
                   const json = await response.json();
@@ -39,35 +43,19 @@ function CollectionBooks() {
                   setLoading(false);
               }
           }
-          fetchData();
+          fetchUserBooks();
       }
   }, [user, fetchURL, collection]); 
 
 
-    const deleteData = async (id, type) => {
-      try {
-        const response = await fetch('http://localhost:80/readsync/backend/deleteData.php', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ 
-            id: id, 
-            type: type
-          })
-      });
-          const data = await response.json();
-          if (data.result === "Book deleted successfully") {
-            setDeleteSuccess(true);
-        } 
-        } catch (err) {
-          setError(err.message);
-        }
-      };
-
-    if (deleteSuccess) {
+  const handleDeleteBook = async (id) => {
+    try {
+      await deleteData(id, 'book');
       window.location.reload(); 
+    } catch (err) {
+        setError(err.message);
     }
+  };
     
   return(
     <>
@@ -88,7 +76,7 @@ function CollectionBooks() {
                 bookData[0].result.map((data, index) => (
                   <div key={index} className="book-container book-leidos-container-size">
                     <div className={deleteMode ? "delete-true center" : "delete-false" }>
-                      <p onClick= {() => deleteData(data.idLibro, "book")}><strong>X</strong></p>
+                      <p onClick= {() => handleDeleteBook(data.idLibro)}><strong>X</strong></p>
                     </div>
                     
                     <Link to={`/libro/${data.ID}`}>
@@ -107,8 +95,9 @@ function CollectionBooks() {
                         activeColor={"#895845"}
                         edit={false}
                       />
-                      <p><strong>Formato:</strong>{data.formato}</p>
-                      <p>{data.comentario}</p>
+                      {data.formato ? <p><strong>Formato: </strong>{data.formato}</p> : ""}
+                      {data.comentario ?<p><strong>Comentario: </strong>{data.comentario}</p> : ""}
+                      
                       
                     </div>
                   </div>
@@ -120,7 +109,7 @@ function CollectionBooks() {
                 bookData[0].result.map((data, index) => (
                   <div key={index} className="book-container center book-container-size">
                     <div className={deleteMode ? "delete-true center" : "delete-false" }>
-                      <p onClick= {() => deleteData(data.idLibro, "book")}><strong>X</strong></p>
+                      <p onClick= {() => handleDeleteBook(data.idLibro)}><strong>X</strong></p>
                     </div>
                     <Link to={`/libro/${data.ID}`} className="book-gap center">
                       <p>{data.nombre}</p>

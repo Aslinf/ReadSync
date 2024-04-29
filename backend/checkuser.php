@@ -8,20 +8,12 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Content-Type: application/json");
 
-
-$eData = file_get_contents("php://input");
-
-//decode json data
-$dData = json_decode($eData, true);
-
-// mirar descodificación
-if ($dData === null) {
-    $response[] = array("result" => "Error decoding JSON data");
+$user = $_GET['user'];
+if ($user === "") {
+    $response[] = array("result" => "Falta información de usuario");
     echo json_encode($response);
     exit();
 }
-
-$user = $dData['user'];
 
 $result = "";
 

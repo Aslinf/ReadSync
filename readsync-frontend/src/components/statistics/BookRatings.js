@@ -19,13 +19,13 @@ function BookRatings({ bookRatingsData }){
 
 	return(
 		<div className="best-ratings-container center">
-			{bookRatingsData && bookRatingsData.length > 0 ? 
+			{bookRatingsData && bookRatingsData[0] && bookRatingsData[0].length > 0 ? 
 			<div className="center">
-				<p className="chart-title ">Mis libros favoritos: </p>
+				<p className="chart-title">Mis libros favoritos: </p>
 				<ReactStars 
 					count={5}
 					size={50}
-					value={"5"}
+					value={5}
 					isHalf={true}
 					color={"#d3b79e"}
 					activeColor={"#895845"}
@@ -47,7 +47,7 @@ function BookRatings({ bookRatingsData }){
 				</div>
 			</div>
 
-			: <p className="chart-title">Aún no tienes libros favoritos</p>}
+			: <p className="chart-title" style={{paddingTop: "20px"}}>Aún no tienes libros favoritos</p>}
 		</div>
 	)
 }

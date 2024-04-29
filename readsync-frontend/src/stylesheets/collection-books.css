@@ -13,7 +13,7 @@
 }
 
 .books-section {
-    margin-top: 40px;
+    margin: 40px 0px 100px 0px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -40,16 +40,19 @@
 .book-leidos-container-size {
     height: 230px;
     width: 320px;
+    transition: all 0.5s ease-out;
 }
 
 .book-leidos-container-size:hover {
-    height: 245px;
-    width: 335px;
+    transform: scale(1.08);
+}
+
+.book-container-size {
     transition: all 0.5s ease-out;
 }
 
 .book-container-size:hover {
-    height: 200%;
+    transform: scale(1.08);
 }
 
 .book-container > p:first-child{

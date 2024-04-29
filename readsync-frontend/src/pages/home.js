@@ -16,6 +16,7 @@ const Header = () => {
     }
   }, [token, setIsAuthenticated]);
 
+  //guardar la busqueda del usuario
   const handleChange = (e) => {
     setBusqueda(e.target.value);
     if(e.target.value === ""){
@@ -23,7 +24,8 @@ const Header = () => {
     }
   }
 
-  const handleKeyPress = (e) => {
+  //hacer busqueda en enter
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       navigate(`/busqueda/${busqueda}`);
     }
@@ -41,7 +43,7 @@ const Header = () => {
         </Link>
 
         <div className='search-items'>
-          <input type='text' placeholder='Buscar algún libro' className='search-bar' onChange={handleChange} onKeyPress={handleKeyPress}/>
+          <input type='text' placeholder='Buscar algún libro' className='search-bar' onChange={handleChange} onKeyDown={handleKeyDown}/>
           <Link to={`/busqueda/${busqueda}`} className='search-button'>Buscar</Link>
         </div>
 
@@ -73,7 +75,11 @@ const Header = () => {
           </div>
 
         ) : (
-          <Link to="/sesion" className='button-signup'>Registrate</Link>
+          <div style={{display: "flex", columnGap:"10px"}}>
+            <Link to="/sesion/registro" className='button-signup'>Registrate</Link>
+            <Link to="/sesion/iniciar" className='button-signup'>Iniciar sesión</Link>
+          </div>
+          
         ) }
 
       </header>

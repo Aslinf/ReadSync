@@ -2,7 +2,6 @@
 
 include("dataBaseConfig.php");
 
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
@@ -13,13 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-
 $eData = file_get_contents("php://input");
-
-
 $dData = json_decode($eData, true);
 
-// mirar descodificación
 if ($dData === null) {
     $response[] = array("result" => "Error decoding JSON data");
     echo json_encode($response);
@@ -27,32 +22,33 @@ if ($dData === null) {
 }
 
 $user = $dData['user'];
-$email = $dData['email'];
-$password = $dData['password'];
+$readingGoal = $dData['readingGoal'];
+
 
 $result = "";
 
-if($user !== "" and $email !== "" and $password !== ""){
-    // Hash contraseña
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+if ($user !== "" && $readingGoal !== "") {
 
-    $sql = "INSERT INTO USUARIOS (usuario, email, password) VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $user, $email, $hashedPassword);
-    $stmt->execute();
+    // Actualizamos la información del objetivo de lectura
+    $sqlUpdateGoal = "UPDATE USUARIOS SET objetivo_lectura = ? WHERE usuario = ?";
+    $stmtUpdateGoal = $conn->prepare($sqlUpdateGoal);
+    $stmtUpdateGoal->bind_param("ds", $readingGoal, $user);
+    $stmtUpdateGoal->execute();
 
-    if($stmt->affected_rows > 0){
-        $result = "Registro completado";
-    } else {
-        $result = "Error registrando el usuario";
+    if ($stmtUpdateGoal->affected_rows > 0) {
+        $result = "Objetivo de lectura actualizado. ";
     }
 
-    $stmt->close();
+    $stmtUpdateGoal->close();
+
+} elseif ($getReadingGoal !== "") {
+
+ 
+
 } else {
-    $result = "Campos vacíos";
+    $result = "Falta información ";
 }
 
-$conn -> close();
+$conn->close();
 $response[] = array("result" => $result);
 echo json_encode($response);
-
