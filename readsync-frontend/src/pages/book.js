@@ -184,12 +184,14 @@ function Book(){
 	function getCollections(user) {
 			const fetchData = async () => {
 					try {
-							const response = await fetch("http://localhost:80/readsync/backend/getCollections.php", {
-									method: 'POST',
+						  const fetchURLCollections = "http://localhost:80/readsync/backend/getCollections.php";
+							const urlCollections = new URL(fetchURLCollections);
+							urlCollections.searchParams.append('user', user);
+							const response = await fetch( urlCollections, {
+									method: 'GET',
 									headers: {
 											'Content-Type': 'application/json'
-									},
-									body: JSON.stringify({ user: user }) 
+									}
 							});
 							const json = await response.json();
 							setCollectionData(json);

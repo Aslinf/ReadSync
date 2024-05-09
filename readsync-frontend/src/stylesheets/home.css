@@ -3,12 +3,15 @@
     --light-brown-color: #5b3c33;
     --dark-cream-color: #EEE5DA;
     --light-cream-color: #FBF8F5;
-
 }
 
-body .home {
+html { height: 100% }
+body { min-height: 100% }
+#root { height: 100vh }
+
+.home {
+    height: 100%;
     background-color: var(--light-cream-color);
-    height: 100vh;
 }
 
 /* HEADER */
@@ -190,6 +193,7 @@ body .home {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: var(--light-cream-color);
 }
 
 .loader {
@@ -223,6 +227,16 @@ body .home {
 
 
 .home-container {
+    height: 100%;
+    z-index: 0; 
+    background-image: url("../Assets/FondoWeb.png");
     background-color: var(--light-cream-color);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
+@media screen and (max-width: 768px) {
+    .home-container{
+        background-image: url("../Assets/FondoWebPhone.png");
+    }
+}

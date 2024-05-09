@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-
 $user = $_GET['user'];
 
 if ($user === "") {

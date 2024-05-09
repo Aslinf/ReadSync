@@ -160,7 +160,9 @@ function Statistics(){
 			:(
 			<section id="statistics-section">
 				<div className='text-stadistics'>
-					{numBookData[0][0].total_unique_books == 0 && numBookData[0][0].total_unique_books_read == 0 ? "" :
+					{numBookData[0][0].total_unique_books == 0 && numBookData[0][0].total_unique_books_read == 0 ? 
+					<div className='chart-title' style={{paddingTop: "10%"}}>Aún no tienes libros en la biblioteca</div> 
+					:
 						<NumBooks 
 							numBookData={numBookData}
 						/>
@@ -179,7 +181,7 @@ function Statistics(){
 				
 
 				<div className='graphics'>
-					{bookFormatData[0].length == 0 ? "" : 
+					{bookFormatData[0].length == 0 ? <div></div> : 
 						<BooksFormats 
 							bookFormatData={bookFormatData}
 						/>

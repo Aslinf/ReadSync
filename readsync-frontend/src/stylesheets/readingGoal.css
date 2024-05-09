@@ -1,5 +1,6 @@
 .reading_goal_container {
     width: 100%;
+    color: var(--dark-brown-color);
 }
 
 .reading_goal_container > button {

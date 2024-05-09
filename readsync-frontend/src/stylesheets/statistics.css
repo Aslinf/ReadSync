@@ -107,7 +107,12 @@
     font-size: 2.5rem;
     opacity: 0.8;
 }
+
 /* Statistics */
+
+#statistics-section {
+    background-color: var(--light-cream-color);
+}
 
 #statistics-section > .graphics {
     display: flex;

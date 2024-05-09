@@ -4,13 +4,16 @@ import { useAuth } from "./AuthContext";
 import "../stylesheets/library.css";
 import MsgPopup from "./MsgPopup";
 import { Loader } from "../pages/home";
+import useDeleteData from "./useDeleteData";
 
-function ShowCollections({ deleteData }) {
+function ShowCollections() {
+	const { deleteData } = useDeleteData();
     const { user } = useAuth();
     const [collectionData, setCollectionData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 	const [deleteMode, setDeteleMode] = useState(false);
+	const [reload, setReload] = useState(false);
     const fetchURL = "http://localhost:80/readsync/backend/getCollections.php";
 
     useEffect(() => {
@@ -39,13 +42,14 @@ function ShowCollections({ deleteData }) {
 					}
         }
         getCollections();
-    }, [user, fetchURL])
+    }, [user, fetchURL, reload])
 
 
     const handleDeleteCollection = async (id) => {
         try {
             await deleteData(id, 'collection');
-			window.location.reload(); 
+			setReload(!reload);
+			//window.location.reload(); 
         } catch (err) {
             setError(err.message);
         }

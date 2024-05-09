@@ -5,13 +5,14 @@ import { Loader } from "../pages/home";
 import MsgPopup from "./MsgPopup";
 import ReactStars from "react-rating-stars-component";
 import "../stylesheets/collection-books.css";
-import deleteData from "../pages/library";
+import  useDeleteData  from "./useDeleteData";
 
 import { useLocation } from 'react-router-dom';
 
 function CollectionBooks() {
 
   const location = useLocation();
+  const { deleteData } = useDeleteData();
   const { collectionID } = location.state;
   const { collection } = useParams();
   const { user } = useAuth();
@@ -19,6 +20,7 @@ function CollectionBooks() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [deleteMode, setDeteleMode] = useState(false);
+  const [reload, setReload] = useState(false);
   const fetchURL = "http://localhost:80/readsync/backend/getUserBooks.php"; 
   
     useEffect(() => {
@@ -45,13 +47,14 @@ function CollectionBooks() {
           }
           fetchUserBooks();
       }
-  }, [user, fetchURL, collection]); 
+  }, [user, fetchURL, collection, reload]); 
 
 
   const handleDeleteBook = async (id) => {
     try {
       await deleteData(id, 'book');
-      window.location.reload(); 
+      setReload(!reload);
+      //window.location.reload(); 
     } catch (err) {
         setError(err.message);
     }

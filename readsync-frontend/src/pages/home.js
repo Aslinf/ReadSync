@@ -110,10 +110,6 @@ function Home() {
 
       </div>
 
-      <footer>
-        
-      </footer>
-
     </div>  
 		</>
 	)

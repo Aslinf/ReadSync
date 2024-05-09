@@ -17,7 +17,9 @@ function Carrousel({ data, title }){
     return(
         <>
 			<div className="book-subjects">
-				<span><b>{title}</b> </span>
+				{title == "Colecciones" ? <span style={{fontSize: "1.3rem", fontWeight: "600"}}>{title}</span>
+				: <span><b>{title}</b> </span>}
+				
 				<div className="book-subjects-content">
 					<button className="book-categories-button" onClick={() => handleNavCategories('left')}>{`<`}</button>
 					<ul ref={navRef} className="book-categories">

@@ -8,9 +8,10 @@ import BookRatings from "../components/statistics/BookRatings";
 import Carrousel from "../components/Carrousel";
 import ReadingGoalForm from "../components/ReadingGoal";
 import { ReadingGoal } from "../components/ReadingGoal";
-import deleteData from "../pages/library";
+import useDeleteData from "../components/useDeleteData";
 
 function Profile() {
+	const { deleteData } = useDeleteData();
 	const { user, logout } = useAuth();
 	const navigate = useNavigate();
 	const [collectionsData, setCollectionsData] = useState([]);
@@ -20,8 +21,8 @@ function Profile() {
 	const [bookRatingsData, setBookRatingsData] = useState([]);
 	const [deletButtonVisivility, setDeleteButtonVisivility] = useState(true);
 	const date = new Date().getFullYear();
-	const fetchURL = "http://localhost:80/readsync/backend/getCollections.php";
-	const getBookRatingsEndpoint = "http://localhost:80/readsync/backend/statistics/getBookRating.php";
+	const fetchURL = "https://readsync.uabcilab.cat/backend/getCollections.php";
+	const getBookRatingsEndpoint = "https://readsync.uabcilab.cat/backend/statistics/getBookRating.php";
 
 	
 	const getCorrectData = (data) => {
@@ -41,12 +42,9 @@ function Profile() {
 					}
 				});
 				const json = await response.json();
-				if(json.length > 0 && json[0].result !== "Falta información de usuario"){
+				if(json.length > 0 && json[0].result !== `Ninguna colección de ${user}`){
 					getCorrectData(json[0].result);
-				} else {
-					throw new Error('Error al conseguir las colecciones');
-				}
-
+				} 
 
 				const urlRatings = new URL(getBookRatingsEndpoint);
 				urlRatings.searchParams.append('user', user);
@@ -88,7 +86,7 @@ function Profile() {
 
 	//Reading Goal
 	const [readingGoalData, setReadingGoalData] = useState("");
-	const readingGoalEndPoint = "http://localhost:80/readsync/backend/getReadingGoal.php";
+	const readingGoalEndPoint = "https://readsync.uabcilab.cat/backend/getReadingGoal.php";
 	const [readingGoal, setReadingGoal] = useState(false);
 	const [readingGoalForm, setReadingGoalForm] = useState(true);
 	const [successfullReadingGoal, setSuccessfullReadingGoal] = useState(false);
@@ -147,6 +145,8 @@ function Profile() {
 						error={error}
 						setError={setError}
 						user={user}
+						setReadingGoalData={setReadingGoalData}
+						toggleReadingGoal={toggleReadingGoal}
 					/> 
 				: ""}
 
@@ -170,7 +170,7 @@ function Profile() {
 						
 				 : (<div className="noInfo chart-title center">Aún no tienes colecciones</div>)}
 				
-				{bookRatingsData.length > 0 && <BookRatings bookRatingsData={bookRatingsData}/>}
+				{<BookRatings bookRatingsData={bookRatingsData}/>}
 
 				<button className={deletButtonVisivility ? "delete-user-button" : "hide"} onClick={() => {setDeletePopup(!deletePopup); setDeleteButtonVisivility(!deletButtonVisivility)}}>
 					Borrar cuenta

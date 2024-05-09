@@ -1,9 +1,12 @@
 #book-library-section {
+    overflow-y: auto;
     display: flex;
     align-items: center;
     flex-direction: column;
     padding: 20px;
     color: var(--dark-brown-color);
+    background-color: var(--light-cream-color);
+    height: 100%;
 }
 
 .delete-library-container {
@@ -13,7 +16,7 @@
 }
 
 .books-section {
-    margin: 40px 0px 100px 0px;
+    margin-bottom: 5rem;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
