@@ -12,3 +12,5 @@ if (mysqli_connect_error()) {
     echo json_encode($response);
     exit();
 }
+
+?>

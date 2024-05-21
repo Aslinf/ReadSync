@@ -48,17 +48,19 @@ const Header = () => {
         </div>
 
         {/* Mobile menu */}
-        <div className={`menu-mobile ${showMenu ? 'show' : ''}`}>
+        {isAuthenticated? 
+          <div className={`menu-mobile ${showMenu ? 'show' : ''}`}>
           <button className='menu-button-mobile' onClick={toggleMenu}>☰</button>
           <div className="dropdown-menu mobile-menu">
             <ul>
-              <li><Link to={"/perfil"}>Perfil</Link></li>
-              <li><Link to={"/biblioteca"}>Biblioteca</Link></li>
-              <li><Link to={"/estadisticas"}>Estadísticas</Link></li>
+              <li><Link to={"/perfil"} onClick={toggleMenu}>Perfil</Link></li>
+              <li><Link to={"/biblioteca"} onClick={toggleMenu}>Biblioteca</Link></li>
+              <li><Link to={"/estadisticas"} onClick={toggleMenu}>Estadísticas</Link></li>
               <li><Logout /></li>
             </ul>
           </div>
         </div>
+        : ""}
 
         {/* Desktop menu */}
         {isAuthenticated ? (

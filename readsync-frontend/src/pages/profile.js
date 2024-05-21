@@ -132,7 +132,6 @@ function Profile() {
 	}
 
 
-
 	return(
 		<>
 		{loading ? (<Loader />)
@@ -147,6 +146,7 @@ function Profile() {
 						user={user}
 						setReadingGoalData={setReadingGoalData}
 						toggleReadingGoal={toggleReadingGoal}
+						setSuccessfullReadingGoal={setSuccessfullReadingGoal}
 					/> 
 				: ""}
 

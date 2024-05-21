@@ -6,15 +6,19 @@ body .signin-up {
     height: 100vh;
 }
 
+.signin-up > .form {
+ max-width: 360px;
+}
+
 .form h2 {
     color: var(--dark-brown-color);
 }
 
 .signin-up-buttons {
-    border: none;
-    background-color: white;
+    text-decoration: none;
     cursor: pointer;
     font-weight: 700;
+    color: var(--dark-brown-color);
 }
 
 .form > p{
