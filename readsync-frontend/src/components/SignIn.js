@@ -1,5 +1,5 @@
 import '../stylesheets/sign-in.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
@@ -13,7 +13,7 @@ function SignIn({ handleInputChange, user, password, error, setError }){
 
   function handleSignin() {
     if (user !== "" && password !== "") {
-      const url = "http://localhost:80/readsync/backend/sign_in.php"; 
+      const url = "https://readsync.uabcilab.cat/backend/sign_in.php"; 
       
       var headers = {
         "Accept": "application/json",

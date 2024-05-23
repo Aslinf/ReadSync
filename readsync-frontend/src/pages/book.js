@@ -146,11 +146,11 @@ function Book(){
 
 			//dependiento del la colección a la que se añade se escoge el endpoint
 			if(value === "Existe") {
-				var fetchURL = "http://localhost:80/readsync/backend/addBook.php";
+				var fetchURL = "https://readsync.uabcilab.cat/backend/addBook.php";
 			} else if (value === "noExiste") {
-				var fetchURL = "http://localhost:80/readsync/backend/createCollection.php";
+				var fetchURL = "https://readsync.uabcilab.cat/backend/createCollection.php";
 			} else if (value === "Leídos") {
-				var fetchURL = "http://localhost:80/readsync/backend/addBookLeidos.php";
+				var fetchURL = "https://readsync.uabcilab.cat/backend/addBookLeidos.php";
 			}
 
       fetch(fetchURL, {
@@ -184,7 +184,7 @@ function Book(){
 	function getCollections(user) {
 			const fetchData = async () => {
 					try {
-						  const fetchURLCollections = "http://localhost:80/readsync/backend/getCollections.php";
+						  const fetchURLCollections = "https://readsync.uabcilab.cat/backend/getCollections.php";
 							const urlCollections = new URL(fetchURLCollections);
 							urlCollections.searchParams.append('user', user);
 							const response = await fetch( urlCollections, {

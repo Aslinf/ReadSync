@@ -1,6 +1,6 @@
 import '../stylesheets/home.css'
 import { useState, useEffect } from 'react';
-import { Link, useNavigate, Outlet } from 'react-router-dom';
+import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 import Logout from '../components/Logout';
 
@@ -100,13 +100,15 @@ const Header = () => {
 
 function Home() {
 
+  const location = useLocation();
+
 	return(
 		<>
     <div className='home'>
 
       <Header/>
 
-      <div className='home-container'>
+      <div className={location.pathname === '/' ? "home-container" : "home-container-simple"}>
 
         <Outlet />
 

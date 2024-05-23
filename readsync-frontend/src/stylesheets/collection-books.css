@@ -34,6 +34,7 @@
     border-radius: 20px;
     border: 1px solid #d3b79e;
     box-shadow: 11px 11px 15px -3px rgba(0,0,0,0.1);
+    width: 205px;
 }
 
 .book-gap {
@@ -69,12 +70,17 @@
     text-decoration: none;
     color: var(--dark-brown-color);
     cursor: pointer;
+    text-align: center;
 }
 
 .book-info > a {
     text-decoration: none;
     color: var(--dark-brown-color);
     cursor: pointer;
+}
+
+.book-info p {
+    text-align: center;
 }
 
 .book-container > Link > img {

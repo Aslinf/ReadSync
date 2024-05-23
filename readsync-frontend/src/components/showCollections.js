@@ -14,7 +14,7 @@ function ShowCollections() {
     const [error, setError] = useState("");
 	const [deleteMode, setDeteleMode] = useState(false);
 	const [reload, setReload] = useState(false);
-    const fetchURL = "http://localhost:80/readsync/backend/getCollections.php";
+    const fetchURL = "https://readsync.uabcilab.cat/backend/getCollections.php";
 
     useEffect(() => {
         const getCollections = async () => {

@@ -27,7 +27,6 @@ function Search(){
         const response = await fetch(api);
         const json = await response.json();
         setData(json.items || []);
-        console.log(json);
         const totalItems = json.totalItems || 0;
         setTotalPages(Math.ceil(totalItems / RESULTS_PER_PAGE));
       } catch (err) {

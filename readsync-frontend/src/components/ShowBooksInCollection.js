@@ -21,7 +21,7 @@ function CollectionBooks() {
   const [loading, setLoading] = useState(true);
   const [deleteMode, setDeteleMode] = useState(false);
   const [reload, setReload] = useState(false);
-  const fetchURL = "http://localhost:80/readsync/backend/getUserBooks.php"; 
+  const fetchURL = "https://readsync.uabcilab.cat/backend/getUserBooks.php"; 
   
     useEffect(() => {
       if (user) { 

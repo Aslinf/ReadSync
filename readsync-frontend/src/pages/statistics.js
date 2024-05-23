@@ -22,12 +22,12 @@ function Statistics(){
 	const [bookRatingsData, setBookRatingsData] = useState([]);
 	const [bookCategories, setBookCategoriesData] = useState([]);
 
-	const getNumBooksEndpoint = "http://localhost:80/readsync/backend/statistics/getNumBooks.php";
-	const getBookPagesEndpoint = "http://localhost:80/readsync/backend/statistics/getBookPages.php";
-	const getBookFormatEndpoint = "http://localhost:80/readsync/backend/statistics/getBookFormat.php";
-	const getBookAuthorsEndpoint = "http://localhost:80/readsync/backend/statistics/getBookAuthors.php";
-	const getBookRatingsEndpoint = "http://localhost:80/readsync/backend/statistics/getBookRating.php";
-	const getBookCategoriesEndpoint = "http://localhost:80/readsync/backend/statistics/getBookCategories.php";
+	const getNumBooksEndpoint = "https://readsync.uabcilab.cat/backend/statistics/getNumBooks.php";
+	const getBookPagesEndpoint = "https://readsync.uabcilab.cat/backend/statistics/getBookPages.php";
+	const getBookFormatEndpoint = "https://readsync.uabcilab.cat/backend/statistics/getBookFormat.php";
+	const getBookAuthorsEndpoint = "https://readsync.uabcilab.cat/backend/statistics/getBookAuthors.php";
+	const getBookRatingsEndpoint = "https://readsync.uabcilab.cat/backend/statistics/getBookRating.php";
+	const getBookCategoriesEndpoint = "https://readsync.uabcilab.cat/backend/statistics/getBookCategories.php";
 
 
 	//conseguimos toda la información necesaria para las estadísticas

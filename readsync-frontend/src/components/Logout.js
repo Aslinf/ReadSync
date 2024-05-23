@@ -7,7 +7,7 @@ function Logout() {
 
   const handleLogout = () => {
 
-    const url = "http://localhost:80/readsync/backend/logout.php";
+    const url = "https://readsync.uabcilab.cat/backend/logout.php";
 
     fetch(url, {
       method: "POST",

@@ -32,6 +32,7 @@
     flex-direction: row;
     column-gap: 20px;
     padding: 10px;
+    width: 700px;
 }
 
 .book-pages-books > .book {
@@ -41,10 +42,21 @@
     row-gap: 10px;
     text-decoration: none;
     color: var(--dark-brown-color);
+    text-align: center;
 }
 
 .book p:first-child {
     font-weight: 600;
+}
+
+@media screen and (max-width: 426px) {
+    .book-pages > .book-pages-books {
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        padding: 10px;
+        width: 300px;
+    }
 }
 
 /* Book five stars ratings */
@@ -113,6 +125,7 @@
 #statistics-section {
     background-color: var(--light-cream-color);
 }
+
 
 #statistics-section > .graphics {
     display: flex;

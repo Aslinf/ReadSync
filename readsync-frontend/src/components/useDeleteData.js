@@ -5,7 +5,7 @@ function useDeleteData() {
 
   const deleteData = async (id, type) => {
     try {
-      const response = await fetch('http://localhost:80/readsync/backend/deleteData.php', {
+      const response = await fetch('https://readsync.uabcilab.cat/backend/deleteData.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

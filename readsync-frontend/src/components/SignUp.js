@@ -22,7 +22,7 @@ function SignUp({ handleInputChange, user, email, password, password2, error, se
   //enviamos los datos al backend
   function handleSubmitUser(){
     if(user !== "" && email !== "" && password !== "" && password2 !== ""){
-      const url = "http://localhost:80/readsync/backend/signup.php";
+      const url = "https://readsync.uabcilab.cat/backend/signup.php";
       var headers = {
         "Accept": "application/json",
         "Content-Type": "application/json"
@@ -52,11 +52,6 @@ function SignUp({ handleInputChange, user, email, password, password2, error, se
         setError(err.message);
         console.error(err);
       });
-/*
-      setUser("");
-      setEmail("");
-      setPassword("");
-      setPassword2("");*/
 
     }else {
       setError("¡Se deben rellenar todos los campos!");
@@ -66,7 +61,7 @@ function SignUp({ handleInputChange, user, email, password, password2, error, se
   //miramos si el usuario ya existe
   function checkUser(){
     
-    const url = "http://localhost:80/readsync/backend/checkuser.php";
+    const url = "https://readsync.uabcilab.cat/backend/checkuser.php";
     var headers = {
       "Accept": "application/json",
       "Content-Type": "application/json"

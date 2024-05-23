@@ -235,8 +235,16 @@ body { min-height: 100% }
     background-size: cover;
 }
 
+.home-container-simple {
+    height: 100%;
+    z-index: 0; 
+    background-color: var(--light-cream-color);
+}
+
 @media screen and (max-width: 768px) {
     .home-container{
         background-image: url("../Assets/FondoWebPhone.png");
+        height: 1300px;
     }
+    
 }
