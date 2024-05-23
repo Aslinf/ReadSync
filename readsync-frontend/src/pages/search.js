@@ -11,7 +11,7 @@ function Search(){
 	const [loading, setLoading] = useState(true);
 	const { book } = useParams();
 
-	const APIKey = "AIzaSyBMESbDd7GPd7uKJgr-KFz0A6U5j6CMfA8";
+	const APIKey = "APIKey";
 
 	const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
